@@ -1,0 +1,13 @@
+package com.github.weibao.controller.vo;
+
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * @Create 16/2/1,下午7:17
+ * @Author dongzhukai
+ */
+public class ItemVo {
+    private Set<StaffVo> staffVos = new HashSet<StaffVo>();
+
+}

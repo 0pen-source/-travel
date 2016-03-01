@@ -1,0 +1,97 @@
+package com.github.weibao.model;
+
+import java.math.BigDecimal;
+import javax.persistence.*;
+
+@Table(name = "item_price")
+public class ItemPrice {
+    /**
+     * ID主键
+     */
+    @Id
+    @Column(name = "price_Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer priceId;
+
+    @Column(name = "item_Id")
+    private Integer itemId;
+
+    /**
+     * 单价
+     */
+    @Column(name = "unit_price")
+    private BigDecimal unitPrice;
+
+    /**
+     * 单位
+     */
+    private Integer unit;
+
+    /**
+     * 获取ID主键
+     *
+     * @return price_Id - ID主键
+     */
+    public Integer getPriceId() {
+        return priceId;
+    }
+
+    /**
+     * 设置ID主键
+     *
+     * @param priceId ID主键
+     */
+    public void setPriceId(Integer priceId) {
+        this.priceId = priceId;
+    }
+
+    /**
+     * @return item_Id
+     */
+    public Integer getItemId() {
+        return itemId;
+    }
+
+    /**
+     * @param itemId
+     */
+    public void setItemId(Integer itemId) {
+        this.itemId = itemId;
+    }
+
+    /**
+     * 获取单价
+     *
+     * @return unit_price - 单价
+     */
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    /**
+     * 设置单价
+     *
+     * @param unitPrice 单价
+     */
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    /**
+     * 获取单位
+     *
+     * @return unit - 单位
+     */
+    public Integer getUnit() {
+        return unit;
+    }
+
+    /**
+     * 设置单位
+     *
+     * @param unit 单位
+     */
+    public void setUnit(Integer unit) {
+        this.unit = unit;
+    }
+}

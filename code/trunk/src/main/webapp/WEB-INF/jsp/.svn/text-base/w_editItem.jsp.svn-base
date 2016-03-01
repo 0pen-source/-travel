@@ -1,0 +1,224 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午8:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!doctype html>
+<html class="no-js">
+<jsp:include page="common/w_head.jsp"/>
+<body>
+<jsp:include page="common/w_header_b.jsp"/>
+<!-- sidebar start -->
+<!-- sidebar end -->
+<br>
+<!-- content start -->
+<div class="admin-content">
+  <div class="am-u-lg-12">
+    <%--<div class="am-u-sm-2">--%>
+    <%--<div class="wb-panel-company">--%>
+
+    <%--</div>--%>
+    <%--</div>--%>
+
+    <div class="am-u-sm-9 am-u-sm-centered">
+      <span id="error" class="z_company_error" >${insertItemErro}</span><br>
+      <c:if test="${!empty agencyItems}">
+        <div class="wb-panel-fc">
+          <label>编辑服务信息</label>
+          <hr>
+          <%--<div class="am-g">--%>
+            <%--<form action="${ctx}/item/update" method="post" id="form-item" class="am-form am-form-horizontal">--%>
+              <%--<input type="hidden" id="itemId" value="${agencyItems.itemId}" name="itemId"/>--%>
+              <%--<input type="hidden" id="companyId" value="${agencyItems.companyId}" name="companyId"/>--%>
+
+              <%--<label for="itemName" class="am-u-sm-2 am-form-label">服务名称 </label>--%>
+              <%--<div class="am-form-group am-u-sm-10">--%>
+                <%--<input type="text" name="itemName" id="itemName" value="${agencyItems.itemName}" required/>--%>
+              <%--</div>--%>
+
+
+                <%--&lt;%&ndash;<div class="am-form-group">&ndash;%&gt;--%>
+              <%--<label for="itemCost" class="am-u-sm-2 am-form-label">服务报价</label>--%>
+              <%--<div class="am-form-group am-u-sm-10">--%>
+                <%--<div class="am-input-group">--%>
+                  <%--<span class="am-input-group-label">每月</span>--%>
+                  <%--<input type="number" name="cost" id="itemCost" min="0" value="${agencyItems.cost}" class="am-form-field" required/>--%>
+                  <%--<span class="am-input-group-label">.00</span>--%>
+                <%--</div>--%>
+              <%--</div>--%>
+                <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<div class="am-form-group">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<label for="itemCost" class="am-u-sm-2 am-form-label"> </label>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<div class="am-input-group">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<span class="am-input-group-label">最低报价</span>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input type="number" name="cost" id="itemMinCost" min="0" placeholder="请输入最小服务价格" class="am-form-field">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<span class="am-input-group-label">.00</span>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<label for="itemCost" class="am-u-sm-2 am-form-label"> </label>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<div class="am-input-group">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<span class="am-input-group-label">最高报价</span>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input type="number" name="cost" id="itemMaxCost" min="0" placeholder="请输入最大服务价格" class="am-form-field">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<span class="am-input-group-label">.00</span>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+
+                <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+              <%--<label for="itemIntro" class="am-u-sm-2 am-form-label">服务详情 </label>--%>
+              <%--<div class="am-form-group am-u-sm-10">--%>
+                <%--<textarea class="" rows="5" id="itemIntro" name="intro"  required>${agencyItems.intro}</textarea>--%>
+              <%--</div>--%>
+
+                <%--&lt;%&ndash;<div class="am-form-group">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<div class="am-u-sm-9 am-u-sm-push-2" id="editItem">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;&lt;%&ndash;<button type="submit" class="am-btn am-btn-primary">保存服务</button>&ndash;%&gt;&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input id="item-modal-button" type="button" class="am-btn am-btn-primary" onclick="insertItem();" value="修改服务"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+              <%--<div class="am-margin am-u-sm-9 am-u-sm-push-2">--%>
+                <%--<button type="submit" class="am-btn am-btn-primary am-btn-xs">提交修改</button>--%>
+                <%--<button id="giveup-save" type="button" class="am-btn am-btn-primary am-btn-xs">放弃修改</button>--%>
+              <%--</div>--%>
+            <%--</form>--%>
+          <%--</div>--%>
+          <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-12  ">
+              <form action="${ctx}/item/update" method="post" id="form-item" class="am-form am-form-horizontal">
+                <input type="hidden" id="itemId" value="${agencyItems.itemId}" name="itemId"/>
+                <input type="hidden" id="companyId" value="${agencyItems.companyId}" name="companyId"/>
+                <input type="hidden" id="olditemName" value="${agencyItems.itemName}" name="olditemName"/>
+                <input name="companyName" value="${companyName}" type="hidden">
+
+
+                <div class="am-form-group">
+                  <label for="itemName" class="am-u-sm-3 am-form-label"><span style="color: #ff0000">*</span>服务名称</label>
+                  <div class="am-form-group am-u-sm-9">
+                    <input type="text" id="itemName" name="itemName" placeholder="请输入你要添加的服务名称(必填)"
+                           value="${agencyItems.itemName}" required/>
+                  </div>
+                </div>
+
+                <div class="am-form-group">
+                  <label for="itemName" class="am-u-sm-3 am-form-label"><span style="color: #ff0000">*</span>服务报价</label>
+                  <div class="am-form-group am-u-sm-9">
+                    <div class="am-input-group">
+                        <%--<span class="am-input-group-label">每月</span>--%>
+                  <span class="am-input-group-label am-g" style="padding: 0px; border: 0px;">
+                    <select id="code" name="code">
+                      <option value="100100">每年</option>
+                      <option value="100101">每半年</option>
+                      <option value="100102">每季度</option>
+                      <option value="100103">月</option>
+                    </select>
+                  </span>
+                      <input type="number" name="cost" id="itemCost"  placeholder="请输入服务价格(必填)" value="${agencyItems.cost}" class="am-form-field" min="1" max="999999" required/>
+                      <span class="am-input-group-label">元</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="am-form-group">
+                  <label for="itemIntro" class="am-u-sm-3 am-form-label">服务详情</label>
+                  <div class="am-u-sm-9">
+                    <span class="am-form-group">
+                    <textarea class="" rows="5" id="itemIntro" name="intro"  value=" " required>&nbsp;&nbsp;${agencyItems.intro}</textarea>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="am-form-group">
+                  <div class="am-u-sm-9 am-u-sm-push-3">
+                    <button type="submit" class="am-btn am-btn-primary am-btn-xs">提交修改</button>
+                    <button id="giveup-save" type="button" class="am-btn am-btn-primary am-btn-xs">放弃修改</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </c:if>
+    </div>
+
+    <%--<div class="am-u-sm-3">--%>
+      <%--<div class="wb-panel-fr">--%>
+        <%--<h5>客户服务</h5>--%>
+        <%--<p>客服邮箱：1204143963@qq.com</p>--%>
+        <%--<p>咨询电话：4000-110-543</p>--%>
+        <%--<p> QQ群：292577932</p>--%>
+      <%--</div>--%>
+    <%--</div>--%>
+  </div>
+</div>
+
+<!-- content end -->
+<br>
+<%--</div>--%>
+
+<!--在这里编写你的代码-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="${ctx}/js/jquery.min.js"></script>
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="${ctx}/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="${ctx}/js/amazeui.min.js"></script>
+<script src="${ctx}/js/app.js"></script>
+<script>
+  $(function () {
+    $("#giveup-save").bind("click",function(){
+      window.location.href="javascript:history.go(-1);";
+    })
+
+    $('#form-item').validator({
+//      H5validation: false,
+      onValid: function (validity) {
+        $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+      },
+
+      onInValid: function (validity) {
+        var $field = $(validity.field);
+        var $group = $field.closest('.am-form-group');
+        var $alert = $group.find('.am-alert');
+        // 不使用插件内置的提示信息
+        //var msg = $field.data('validationMessage') || this.getValidationMessage(validity);
+        // 使用自定义的提示信息
+        if ($(validity.field).attr('name') == 'itemName') {
+          msg = '请填写服务名称';
+        }
+        if ($(validity.field).attr('name') == 'cost') {
+          msg = '请填写1-6位服务价格';
+        }
+        if ($(validity.field).attr('name') == 'intro') {
+          msg = '请填写服务介绍';
+        }
+
+        if (!$alert.length) {
+          $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+          appendTo($group);
+        }
+
+        $alert.html(msg).show();
+      }
+    });
+  });
+</script>
+<style >
+  .z_company_error {
+    display: block;
+    width: 583px;
+    line-height: 40px;
+    margin-bottom: 5px;
+    /*border: 1px solid #ffbdbe;*/
+    /*border-radius: 0px;*/
+    /*background: #ffebeb;*/
+    color: #f00;
+  }
+</style>
+<jsp:include page="common/w_footer.jsp"/>
+</body>
+</html>

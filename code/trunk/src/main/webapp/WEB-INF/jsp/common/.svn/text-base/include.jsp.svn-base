@@ -1,0 +1,33 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta http-equiv="Cache-Control" content="no-store"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+
+<link rel="stylesheet" href="${ctx}/css/amazeui.min.css">
+<link rel="stylesheet" href="${ctx}/css/amazeui.chosen.css">
+<link rel="stylesheet" href="${ctx}/css/amazeui.flat.css">
+<link rel="stylesheet" href="${ctx}/css/amazeui.flat.min.css">
+<link rel="stylesheet" href="${ctx}/css/amazeui.css">
+<link rel="stylesheet" href="${ctx}/css/core.min.css">
+<link rel="stylesheet" href="${ctx}/css/app.css">
+<link rel="stylesheet" href="${ctx}/css/admin.css">
+<link rel="stylesheet" href="${ctx}/css/show.css">
+<link rel="stylesheet" href="${ctx}/css/style.css">
+<script src="${ctx}/js/jquery.min.js"></script>
+<script src="${ctx}/js/amazeui.js"></script>
+<script src="${ctx}/js/amazeui.min.js"></script>
+<script src="${ctx}/js/amazeui.ie8polyfill.js"></script>
+<script src="${ctx}/js/amazeui.ie8polyfill.min.js"></script>
+<script src="${ctx}/js/amazeui.widgets.helper.js"></script>
+<script src="${ctx}/js/amazeui.widgets.helper.min.js"></script>
+<script src="${ctx}/js/handlebars.min.js"></script>
+
+
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>

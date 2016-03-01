@@ -1,0 +1,255 @@
+package com.github.weibao.controller.biz;
+
+import com.github.weibao.Contants;
+import com.github.weibao.controller.BaseController;
+import com.github.weibao.model.AgencyCompany;
+import com.github.weibao.model.BizMember;
+import com.github.weibao.model.ext.AgencyCompanyExt;
+import com.github.weibao.service.AreaService;
+import com.github.weibao.service.CompanyService;
+import com.github.weibao.service.ItemsService;
+import com.github.weibao.service.StaffsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
+
+/**
+ * Created by zwd-apple on 2016/1/6.
+ */
+@RestController
+@RequestMapping("company")
+public class CompanyController extends BaseController {
+    private Logger logger = LoggerFactory.getLogger(CompanyController.class);
+
+    @Autowired
+    CompanyService companyService;
+
+    @Autowired
+    ItemsService itemsService;
+
+    @Autowired
+    StaffsService staffsService;
+
+    @Autowired
+    private AreaService areaService;
+
+//    /**
+//     * zwd-apple
+//     * 公司信息插入
+//     *
+//     * @param company
+//     * @return
+//     */
+//    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+//    public ResponseEntity insertCompany(AgencyCompanyExt company) throws FrontParameterException {
+//        if (null == company) {
+//            throw new FrontParameterException("页面传入参数为null.");
+//        }
+//        if (StringUtils.isEmpty(company.getCompanyName())) {
+//            throw new FrontParameterException("页面传入公司名称为null.");
+//        }
+//
+//        companyService.insertCompany(company);
+//        logger.info("用户[" + company.getAccountId() + "]插入公司[" + company.getCompanyName() + "]成功!");
+//        return new ResponseEntity(company, HttpStatus.OK);
+//    }
+
+
+    /**
+     * zwd
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("w_toAgencyCompany")
+    public ModelAndView toAgencyCompany(HttpServletRequest request, HttpSession httpSession) {
+        BizMember account = doLoginCheck();
+        if (null == account) {
+            request.getSession().setAttribute(Contants.CURRENT_USER_REFERER, "company/w_toAgencyCompany");
+            return new ModelAndView("w_login");
+        }
+
+
+        List<AgencyCompany> agencyCompanyList = companyService.findCompanyByAccountId(account.getId());
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("w_agencyCompany");
+        httpSession.setAttribute("agencyCompanyList", agencyCompanyList);
+        mv.addObject(agencyCompanyList);
+        mv.addObject("accountId", account.getId());
+        return mv;
+    }
+
+    @RequestMapping("w_toEditCompany")
+    public ModelAndView toEditCompany(Integer companyId,String companyErroStatus) {
+        BizMember account = doLoginCheck();
+        if (null == account) {
+            request.getSession().setAttribute(Contants.CURRENT_USER_REFERER, "company/w_toAgencyCompany");
+            return new ModelAndView("w_login");
+        }
+        if (null == companyId) {
+            throw new NullPointerException("页面如果要跳转到编辑公司页面,则传入公司ID不能为NULL.");
+        }
+
+        AgencyCompanyExt agencyCompanyExt = companyService.findCompanyExtByAccountIdCompanyId(account.getId(), companyId);
+
+        if("2".equals(companyErroStatus)){
+            ModelAndView mv = new ModelAndView();
+            mv.setViewName("w_editCompany");
+            if (null != agencyCompanyExt) {
+                mv.addObject(agencyCompanyExt);
+            }
+            String companyErro = "对不起,该账户下已经由该公司,请核对公司名称是否重复";
+            mv.addObject("companyErro",companyErro);
+            return mv;
+        }
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("w_editCompany");
+        if (null != agencyCompanyExt) {
+            mv.addObject(agencyCompanyExt);
+        }
+        return mv;
+    }
+
+    ///**
+    // * 查询/显示公司
+    // *
+    // * @param
+    // * @return
+    // */
+    //@RequestMapping("w_showCompany")
+    //public ModelAndView wshowCompany(AgencyCompany agencyCompany) {
+    //    agencyCompany = companyService.selectWshowCompany(agencyCompany);
+    //    ModelAndView mv = new ModelAndView();
+    //    mv.setViewName("w_showCompany");
+    //    mv.addObject(agencyCompany);
+    //    return mv;
+    //}
+
+    /**
+     * zwd
+     *
+     * @param company
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public ModelAndView insertCompany(AgencyCompanyExt company) {
+        if (null == company) {
+            throw new NullPointerException("页面传入参数为null.");
+        }
+        if (StringUtils.isEmpty(company.getCompanyName())) {
+            throw new NullPointerException("页面传入公司名称为null.");
+        }
+        logger.debug("this is InsertCompany");
+        int isSucess = companyService.saveCompany(company);
+        if (isSucess == 0) {
+            logger.debug("用户[" + company.getAccountId() + "]插入公司[" + company.getCompanyName() + "]成功!");
+            return new ModelAndView("redirect:/company/w_toAgencyCompany?accountId=" + company.getAccountId());
+        } else if(isSucess == 1){
+            logger.debug("用户[" + company.getAccountId() + "]插入公司[" + company.getCompanyName() + "]失败!");
+
+            return null;
+        }else if (isSucess == 2){
+            logger.debug("用户[" + company.getAccountId() + "]插入公司[" + company.getCompanyName() + "]失败: 公司名称不可重复!!");
+//            ModelAndView mv = new ModelAndView();
+//            mv.setViewName("w_addCompany");
+//            mv.addObject("companyErro",companyErro);
+//            return mv;
+            return new ModelAndView("redirect:/w_toAddCompany?companyErroStatus=2");
+        }
+        return null;
+    }
+
+
+    @RequestMapping("/query")
+    public ModelAndView queryCompany(HttpServletRequest request) {
+        doLoginCheck();
+
+        List<AgencyCompany> companyList = null;
+
+        BizMember account = (BizMember) request.getSession().getAttribute(Contants.CURRENT_USER);
+        if (null != account) {
+            companyList = companyService.queryByAccountId(account.getUserid());
+        }
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("w_agencyCompany");
+        mv.addObject("listCompany", companyList);
+        return mv;
+    }
+
+    /**
+     * zwd-apple
+     * 根据主键删除公司
+     */
+    @RequestMapping("w_deleteCompany")
+    public ModelAndView wdeleteCompany(String companyId) throws Exception {
+        AgencyCompanyExt agencyCompanyExt = new AgencyCompanyExt();
+        agencyCompanyExt.setCompanyId(Integer.valueOf(companyId));
+        if (null == companyId || "".equals(companyId)) {
+            throw new Exception("参数为 null");
+        }
+        Boolean isSucess = companyService.removeCompany(agencyCompanyExt);
+        if (isSucess) {
+            logger.debug("公司[" +companyId+ "]删除成功!");
+            return new ModelAndView("redirect:/company/w_toAgencyCompany?accountId=" + agencyCompanyExt.getAccountId());
+        } else {
+            logger.debug("公司[" +companyId+ "]删除失败,isSucess返回false");
+            return null;
+        }
+    }
+
+    ///**
+    // * 编辑公司
+    // *
+    // * @param agencyCompany
+    // * @return
+    // */
+    //@RequestMapping("w_editCompany")
+    //public ModelAndView weditCompany(AgencyCompany agencyCompany) {
+    //    agencyCompany = companyService.selectWshowCompany(agencyCompany);
+    //    ModelAndView mv = new ModelAndView();
+    //    mv.setViewName("w_editCompany");
+    //    mv.addObject("agencyCompany", agencyCompany);
+    //    return mv;
+    //}
+
+    /**
+     * zwd-apple
+     * 更新公司
+     *
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ModelAndView updateCompany(AgencyCompany agencyCompany,String companyNameOld) {
+        if (null == agencyCompany || null == agencyCompany.getCompanyId()) {
+            throw new NullPointerException("页面如果要保存编辑公司页面信息,则公司ID不能为NULL.");
+        }
+        int isSucess = companyService.updateCompanyById(agencyCompany,companyNameOld);
+        if (isSucess == 0) {
+            logger.debug("公司[" + agencyCompany.getCompanyId() + "]修改成功!");
+            return new ModelAndView("redirect:/company/w_toAgencyCompany?accountId=" + agencyCompany.getAccountId());
+        } else if (isSucess == 1)  {
+            logger.debug("公司[" + agencyCompany.getCompanyId() + "]修改失败!");
+            return null;
+        }else if(isSucess == 2){
+            logger.debug("公司[" + agencyCompany.getCompanyId() + "]修改失败:  公司名称不可重复!");
+            return new ModelAndView("forward:/company/w_toEditCompany?companyErroStatus=2");
+        }
+        return null;
+    }
+
+}
+
+

@@ -1,0 +1,202 @@
+package com.github.weibao.service;
+
+import com.github.weibao.Contants;
+import com.github.weibao.controller.vo.StaffVo;
+import com.github.weibao.mapper.AgencyItemsMapperExt;
+import com.github.weibao.mapper.AgencyStaffsMapper;
+import com.github.weibao.mapper.AgencyStaffsMapperExt;
+import com.github.weibao.model.AgencyStaffs;
+import com.github.weibao.model.ext.ItemStaffLink;
+import com.github.weibao.utils.PropertyUtil;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by zwd-apple on 2016/1/8.
+ */
+@Service
+public class StaffsService {
+
+    @Autowired
+    AgencyStaffsMapper agencyStaffsMapper;
+
+    @Autowired
+    private AgencyStaffsMapperExt agencyStaffsMapperExt;
+
+    @Autowired
+    AgencyItemsMapperExt agencyItemsMapperExt;
+
+    @Autowired
+    private UploadFileService uploadFileService;
+
+
+    public List<StaffVo> findByItemId(Integer itemId) {
+        try {
+            List<AgencyStaffs> agencyStaffsList = agencyStaffsMapperExt.selectByItemId(itemId);
+            List<StaffVo> staffVoList = new ArrayList<StaffVo>(agencyStaffsList.size());
+            String fileserver = PropertyUtil.getInstance().getValue("image_server_path");
+            for (int i = 0; i < agencyStaffsList.size(); i++) {
+                StaffVo staffVo = new StaffVo();
+
+                AgencyStaffs agencyStaffs = agencyStaffsList.get(i);
+                BeanUtils.copyProperties(staffVo, agencyStaffs);
+                if (!StringUtils.isEmpty(agencyStaffs.getHeadFilename())) {
+                    staffVo.setHeadImgSrc(fileserver + agencyStaffs.getHeadFilename());
+                }
+                if (!StringUtils.isEmpty(agencyStaffs.getWeichatcodeFilename())) {
+                    staffVo.setWeixinImgSrc(fileserver + agencyStaffs.getWeichatcodeFilename());
+                }
+
+                staffVoList.add(staffVo);
+            }
+
+            return staffVoList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public StaffVo findStaffById(Integer itemId, Integer staffId) {
+        StaffVo staffVo = new StaffVo();
+        try {
+            AgencyStaffs agencyStaffs = agencyStaffsMapper.selectByPrimaryKey(staffId);
+            BeanUtils.copyProperties(staffVo, agencyStaffs);
+            staffVo.setItemId(String.valueOf(itemId));
+            return staffVo;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean delete(Integer staffId) {
+        try {
+//            agencyStaffsMapper.deleteByPrimaryKey(staffId);
+            AgencyStaffs agencyStaffs = new AgencyStaffs();
+            agencyStaffs.setIsDeleted(String.valueOf(Contants.IS_DELETED));
+            agencyStaffs.setStaffId(staffId);
+            int updateStadus = agencyStaffsMapper.updateByPrimaryKeySelective(agencyStaffs);
+            if (updateStadus == 1){
+            return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean save(StaffVo staffVo) {
+        AgencyStaffs agencyStaffs = new AgencyStaffs();
+        try {
+            //将staffVo中相同的属性对agencyStaffs进行赋值.
+            BeanUtils.copyProperties(agencyStaffs, staffVo);
+
+            //staffVo.validateFile();
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            agencyStaffs.setIsDeleted("-1");
+            agencyStaffs.setCreatetime(new Date());
+
+
+            if (!StringUtils.isEmpty(staffVo.getHeadImgFile().getOriginalFilename())) {
+                String headImgFileName = uploadFileService.upload(staffVo.getHeadImgFile());
+                if (!StringUtils.isEmpty(headImgFileName)) {
+                    agencyStaffs.setHeadFilename(headImgFileName);
+                }
+            }
+            if (!StringUtils.isEmpty(staffVo.getWeixinImgFile().getOriginalFilename())) {
+                String weixinImgName = uploadFileService.upload(staffVo.getWeixinImgFile());
+                if (!StringUtils.isEmpty(weixinImgName)) {
+                    agencyStaffs.setWeichatcodeFilename(weixinImgName);
+                }
+            }
+
+            int insertStaffsStatus = agencyStaffsMapper.insert(agencyStaffs);
+
+            if (insertStaffsStatus == 1) {
+                ItemStaffLink itemStaffLink = new ItemStaffLink();
+                itemStaffLink.setItemId(Integer.valueOf(staffVo.getItemId()));
+                itemStaffLink.setStaffId(agencyStaffs.getStaffId());
+                int insertStaffsItemsStatu = agencyItemsMapperExt.insertStaffsItemsRelevance(itemStaffLink);
+
+                if (insertStaffsItemsStatu == 1) {
+                    return true;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public boolean updateStaffById(StaffVo staffVo) {
+        AgencyStaffs agencyStaffs = new AgencyStaffs();
+        try {
+            BeanUtils.copyProperties(agencyStaffs, staffVo);
+
+            //staffVo.validateFile();
+            //if (!StringUtils.isEmpty(staffVo.getHeadImgFile().getOriginalFilename())) {
+            //    agencyStaffs.setHeadFilename(staffVo.getHeadImgFile().getOriginalFilename());
+            //}
+            //if (!StringUtils.isEmpty(staffVo.getWeixinImgFile().getOriginalFilename())) {
+            //    agencyStaffs.setWeichatcodeFilename(staffVo.getWeixinImgFile().getOriginalFilename());
+            //}
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            //agencyStaffs.(new Date());
+            if (!StringUtils.isEmpty(staffVo.getHeadImgFile().getOriginalFilename())) {
+                String headImgFileName = uploadFileService.upload(staffVo.getHeadImgFile());
+                if (!StringUtils.isEmpty(headImgFileName)) {
+                    agencyStaffs.setHeadFilename(headImgFileName);
+                }
+            }
+            if (!StringUtils.isEmpty(staffVo.getWeixinImgFile().getOriginalFilename())) {
+                String weixinImgName = uploadFileService.upload(staffVo.getWeixinImgFile());
+                if (!StringUtils.isEmpty(weixinImgName)) {
+                    agencyStaffs.setWeichatcodeFilename(weixinImgName);
+                }
+            }
+            int insertStaffsStatus = agencyStaffsMapper.updateByPrimaryKeySelective(agencyStaffs);
+            if (!StringUtils.isEmpty(staffVo.getHeadImgFile().getOriginalFilename())) {
+                uploadFileService.upload(staffVo.getHeadImgFile());
+            }
+            if (!StringUtils.isEmpty(staffVo.getWeixinImgFile().getOriginalFilename())) {
+                uploadFileService.upload(staffVo.getWeixinImgFile());
+            }
+
+            if (insertStaffsStatus == 1) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+}

@@ -1,0 +1,409 @@
+var strFullPath = window.document.location.href;
+var strPath = window.document.location.pathname;
+var pos = strFullPath.indexOf(strPath);
+var prePath = strFullPath.substring(0, pos);
+var postPath = strPath.substring(0, strPath.substr(1).indexOf("/") + 1);
+var ctx = postPath;
+
+var $company = $('#company-modal');
+var $item = $('#item-modal');
+var $staff = $('#staff-modal');
+var $main = $('#main');
+var $companyTable = $('#companyTable');
+
+
+var confirm = $('#my-confirm');
+
+var confirmBtn = confirm.find('[data-am-modal-confirm]');
+var cancelBtn = confirm.find('[data-am-modal-cancel]');
+
+function insertCompany() {
+
+    var $form = $('#form-company');
+
+    $.ajax({
+        url: ctx + "/company/insert",
+        async: true,
+        cache: false,
+        type: "post",
+        data: $form.serialize(),
+        dataType: "json",
+        success: function (agencyCompany) {
+
+            if ($companyTable.length == 0) {
+                $main.children().remove();
+
+                var result = "<table id=\"companyTable\" class=\"am-table am-table-striped am-table-hover table-main\">"
+                    + "<thead>"
+                    + "<tr>"
+                    + "<th class=\"table-title\">公司名称</th>"
+                    + "<th class=\"table-type\">公司地址</th>"
+                    + "<th class=\"table-author\">法人</th>"
+                    + "<th class=\"table-set am-fr\">操作</th>"
+                    + "</tr>"
+                    + "</thead>"
+                    + "<tbody>"
+                    + "    </tbody>"
+                    + "</table>"
+                $main.append(result);
+                $companyTable = $('#companyTable');
+            }
+
+            result = "<tr id=\"company" + agencyCompany.companyId + "\" >"
+                    //+ "<td><input type=\"checkbox\"/></td>"
+                    //+ "<td>${seq.index +1}</td>"
+                + "<td><a href=\"#\">" + agencyCompany.companyName + "</a></td>"
+                + "<td>" + agencyCompany.address + "</td>"
+                + "<td>" + agencyCompany.lawPerson + "</td>"
+                + "<td>"
+                + "<div class=\"am-btn-toolbar am-fr\">"
+                + "<div class=\"am-btn-group am-btn-group-xs am-fr\">"
+                + "<button class=\"am-btn am-btn-default am-btn-xs\" onclick=\"openInsertItemModal(" + agencyCompany.companyId + ")\"><span class=\"am-icon-copy\"></span> 新增服务</button>"
+                + "<button class=\"am-btn am-btn-default am-btn-xs am-text-secondary\" onclick=\"removeCompany(" + agencyCompany.companyId + ")\"><span class=\"am-icon-pencil-square-o\"></span> 编辑</button>"
+
+                + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger\" onclick=\"removeCompany(" + agencyCompany.companyId + ")\"><span class=\"am-icon-trash-o\"></span> 删除</button>"
+                + "<button class=\"am-btn am-btn-default am-btn-xs \" onclick=\"collapseCompany(" + agencyCompany.companyId + ")\"><span class=\"am-icon-arrow-down\"></span> 展开</button>"
+                + "</div>"
+                + "</div>"
+                + "</td>"
+                + "</tr>";
+
+
+            $companyTable.prepend(result);
+
+            $company.modal('close');
+        },
+
+    });
+}
+
+function insertItem() {
+    var $form = $("#form-item");
+    var companyId = $form.find('#itemBindCompanyId').val();
+    var $itemRow = $("#company" + companyId + "-itemRow");
+    var $a = $("#company" + companyId + "-item-null");
+
+
+    $.ajax({
+        url: ctx + "/item/insert",
+        async: true,
+        cache: true,
+        type: "POST",
+        data: $form.serialize(),
+        dataType: "json",
+        success: function (agencyItems) {
+            if ($a != null) {
+                $a.remove();
+
+                var result = "<div id=\"company" + companyId + "-item" + agencyItems.itemId + "\" >"
+                    + "<div style=\"background: #a5d8a5\">"
+                    + "<input id=\"itemId\" type=\"hidden\" value=\"\"/>"
+                    + "<input id=\"companyId\" type=\"hidden\" value=\"\"/>"
+
+                    + "<label id=\"itemName\">服务项目:" + agencyItems.itemName + "</label>"
+
+                    + "<button class=\"am-fr am-btn am-btn-default am-btn-xs am-text-danger\"><span class=\"am-icon-trash-o\"></span> 删除</button>"
+                    + "<button class=\"am-fr am-btn am-btn-default am-btn-xs am-text-secondary\"><span class=\"am-icon-pencil-square-o\"></span> 编辑</button>"
+                    + "<button class=\"am-fr am-btn am-btn-default am-btn-xs\" onclick=\"openInsertStaffModal(" + companyId + "," + agencyItems.itemId + ")\"><span class=\"am-icon-copy\"></span> 新增联系人</button>"
+                    + "</div>"
+                    + "<div id=\"ctx-company" + companyId + "-item" + agencyItems.itemId + "\">"
+                    + "      服务价格:"
+                    + "      <div style=\"display: inline\" id=\"itemCost\">" + agencyItems.cost + ".00元</div>"
+                    + "      <div style=\"display: none\" id=\"minCost\">" + agencyItems.minCost + "</div>"
+                    + "      <div style=\"display: none\" id=\"maxCost\">" + agencyItems.maxCost + "</div>"
+                    + "      <div style=\"display: none\" id=\"itemIntro\">" + agencyItems.intro + "</div>"
+                    + "      <div id=\"itemStaffLink\"></div><hr>"
+                    + "</div>"
+
+            }
+
+            $itemRow.children().prepend(result);
+            $item.modal('close');
+        }
+    });
+}
+
+function insertStaff() {
+    var $form = $("#form-staff");
+    var companyId = $form.find('#staffBindCompanyId').val();
+    var $ul = $("#company" + companyId + "-staffList");
+    //var $a = $("#company" + companyId + "-staff-null");
+
+    $.ajax({
+        url: ctx + "/staff/insert",
+        async: true,
+        cache: false,
+        type: "POST",
+        data: $form.serialize(),
+        dataType: "json",
+        success: function (agencyStaff) {
+            //if ($a != null)
+            //    $a.remove();
+
+
+            var result = "<li id=\"company" + companyId + "-staff" + agencyStaff.staffId + "\">"
+                + "<span id=\"staffName\">联系人:</span>"
+                + "<span id=\"staffName\" class=\"draggable\" style=\"cursor: move; background: #4cae4c;\">" + agencyStaff.name + "</span>";
+            if (agencyStaff.phone != null && agencyStaff.phone != "") {
+                result += "<span id='phone'> 手机号: ";
+                result += agencyStaff.phone;
+                result += "</span>";
+            }
+            if (agencyStaff.qq != null && agencyStaff.qq != "") {
+                result += "<span id=\"staffQQ\"> QQ: ";
+                result += agencyStaff.qq;
+                result += "</span>";
+            }
+            if (agencyStaff.email != null && agencyStaff.email != "") {
+                result += "<span id=\"email\"> Email: ";
+                result += agencyStaff.email;
+                result += "</span>";
+            }
+            if (agencyStaff.weichat != null && agencyStaff.weichat != "") {
+                result += "<span id=\"email\"> 微信号: ";
+                result += agencyStaff.weichat;
+                result += "</span>";
+            }
+
+            //+ "<span id=\"phone\"> 手机号:" + agencyStaff.phone +"</span>"
+            //+ "<span id=\"staffQQ\"> QQ:" + agencyStaff.qq + "</span>"
+            //+ "<span id=\"email\"> Email:" + agencyStaff.email + "</span>"
+            //+ "<span id=\"weichat\"> 微信号:" + agencyStaff.weichat + "</span>"
+            result += "<button class=\"am-fr am-btn am-btn-default am-btn-xs am-text-danger\"><span class=\"am-icon-trash-o\"></span> 删除</button>";
+            result += "<button class=\"am-fr am-btn am-btn-default am-btn-xs am-text-secondary\"><span class=\"am-icon-pencil-square-o\"></span> 编辑</button>";
+            result += "</li>";
+            $ul.prepend(result);
+
+            $("#staff-modal").modal('close');
+        },
+        error: function () {
+            alert("=====");
+        }
+    });
+}
+
+function removeCompany(companyId) {
+
+    confirmBtn.click(function () {
+
+        $.ajax({
+            url: ctx + "/company/remove",
+            async: true,
+            cache: false,
+            type: "POST",
+            data: {"companyId": companyId},
+            dataType: "text",
+            success: function () {
+                alert($("#company" + companyId).text());
+                $("#company" + companyId).remove();
+                $("#company" + companyId + "-itemRow").remove();
+
+                if ($companyTable.find("tbody tr").length == 0) {
+                    $companyTable.parent().text("亲,还没有自己的公司,请点击新增公司添加公司后才能发布服务.");
+                    $companyTable.remove();
+                }
+            }
+        });
+    });
+
+    cancelBtn.click(function () {
+
+    });
+
+    confirm.modal('open');
+}
+
+function removeItem(companyId, itemId) {
+    var $item = $('#company' + companyId + "-item" + itemId);
+
+    confirmBtn.click(function () {
+        $.ajax({
+            url: ctx + "/item/remove",
+            async: true,
+            cache: false,
+            type: "POST",
+            data: {
+                "companyId": companyId,
+                "itemId": itemId
+            },
+            dataType: "text",
+            success: function () {
+                if ($item != null || $item.size() != 0)
+                    $item.remove();
+
+            }
+        });
+    });
+
+    cancelBtn.click(function () {
+
+    });
+
+    confirm.modal('open');
+}
+
+function removeStaff(companyId, staffId) {
+    var $staff = $('#company' + companyId + "-staff" + staffId);
+
+    confirmBtn.click(function () {
+        $.ajax({
+            url: ctx + "/staff/delete",
+            async: true,
+            cache: false,
+            type: "POST",
+            data: {
+                "companyId": companyId,
+                "staffId": staffId
+            },
+            dataType: "json",
+            success: function () {
+                if ($staff != null)
+                    $staff.remove();
+            }
+        });
+    });
+
+    cancelBtn.click(function () {
+
+    });
+
+    confirm.modal('open');
+}
+
+function editCompany(companyId) {
+    var $form = $("#form-company");
+    var $li = $("#company" + companyId);
+
+    $.ajax({
+        url: ctx + "/company/update",
+        async: true,
+        cache: false,
+        type: "POST",
+        data: $form.serialize(),
+        dataType: "json",
+        success: function (agencyCompany) {
+            $li.find("#companyName").text(agencyCompany.companyName);
+            $li.find("#companyAddress").text(agencyCompany.address);
+
+            $("#company-modal").modal('close');
+
+
+        }
+    });
+}
+
+function editItem(companyId, itemId) {
+    var $form = $("#form-staff");
+    var $li = $("#company" + companyId + "-item" + itemId);
+
+    $("#item-modal-button").bind("click", function () {
+        var itemName = $("#itemName").val();
+        var itemCost = $("#itemCost").val();
+        var itemMinCost = $("#itemMinCost").val();
+        var itemMaxCost = $("#itemMaxCost").val();
+        var itemIntro = $("#itemIntro").val();
+        $.ajax({
+            url: ctx + "/item/update?itemId=" + itemId + "&itemName=" + itemName + "&cost=" + itemCost + "&minCost=" + itemMinCost + "&maxCost=" + itemMaxCost + "&intro=" + itemIntro,
+            async: true,
+            cache: false,
+            type: "POST",
+            dataType: "json",
+            success: function (agencyItems) {
+                $li.find("#itemName").text(agencyItems.itemName);
+                $li.find("#itemCost").text(agencyItems.cost);
+                $li.find("#itemMinCost").text(agencyItems.minCost);
+                //itemCost = $itemWithValue.parent().find("#itemCost").text();
+                //minCost = $itemWithValue.parent().find("#minCost").text();
+                //maxCost = $itemWithValue.parent().find("#maxCost").text();
+                //itemIntro = $itemWithValue.parent().find("#itemIntro").text();
+
+                $("#item-modal").modal('close');
+
+
+            }
+        });
+    })
+}
+
+function editStaff(companyId, staffId) {
+    var $form = $("#form-staff");
+    var $li = $("#company" + companyId + "-staff" + staffId);//$("#company259-staff330")
+
+    $.ajax({
+        url: ctx + "/staff/update",
+        async: true,
+        cache: false,
+        type: "POST",
+        data: $form.serialize(),
+        dataType: "json",
+        success: function (agencyStaff) {
+            $li.find("#staffName").text(agencyStaff.name);
+            $li.find("#phone").text(agencyStaff.phone);
+
+            $("#staff-modal").modal('close');
+
+            drag();
+        }
+    });
+}
+
+function collapseCompany(companyId) {
+    var $company = $("#company" + companyId + "-itemRow");
+    var $btn = $company.siblings().find("#company" + companyId + "-collapse");
+    if ($company.hasClass('am-in')) {
+        $company.collapse('close');
+        $btn.addClass("am-icon-arrow-down");
+        $btn.text("展开");
+    } else {
+        $company.collapse('open');
+        $btn.addClass("am-icon-arrow-up");
+        $btn.text("折叠");
+    }
+}
+
+function openInsertCompanyModal() {
+    $company.find("#company-modal-title").text("添加公司");
+    $company.find("#companyName").val("");
+    $company.find("#address").val("");
+    $company.find("#companyScale").val("");
+    $company.find("#lawPerson").val("");
+    $company.find("#telephone").val("");
+    $company.find("#intro").val("");
+    $company.find("#url").val("");
+    $company.find("#provinceId").find("option[value='']").attr("selected", true);
+    $company.find("#cityId").find("option[value='']").attr("selected", true);
+    $item.find("#item-modal-button").attr("onclick", "insertcompany();");
+    $company.find("#company-modal-button").val("保存公司");
+    $company.css("width", "800");
+    $company.modal('open');
+}
+
+function openInsertItemModal(companyId) {
+    $item.find("#item-modal-title").text("添加服务");
+    $item.find("#itemName").val("");
+    $item.find("#itemCost").val("");
+    $item.find("#itemMinCost").val("");
+    $item.find("#itemMaxCost").val("");
+    $item.find("#itemIntro").val("");
+    $item.find("#item-modal-button").attr("onclick", "insertItem();");
+    $item.find("#item-modal-button").val("保存服务");
+    $item.find('#itemBindCompanyId').val(companyId);
+    $item.css("width", "650");
+    $item.modal('open');
+}
+
+function openInsertStaffModal(companyId, itemId) {
+    $staff.find("#staff-modal-title").text("添加员工");
+    $staff.find('#staffId').val("");
+    $staff.find("#staffName").val("");
+    $staff.find("#staffPhone").val("");
+    $staff.find("#staffQQ").val("");
+    $staff.find("#email").val("");
+    $staff.find("#weichat").val("");
+    $staff.find("#staff-modal-button").attr("onclick", "insertStaff();");
+    $staff.find("#staff-modal-button").val("保存员工");
+    $staff.find('#staffBindCompanyId').val(companyId);
+    $staff.find('#staffBindItemId').val(itemId);
+    $staff.css("width", "620");
+    $staff.modal('open');
+}

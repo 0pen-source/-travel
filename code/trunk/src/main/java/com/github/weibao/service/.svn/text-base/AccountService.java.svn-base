@@ -1,0 +1,33 @@
+package com.github.weibao.service;
+
+import com.ctj.util.secret.MD5;
+import com.github.weibao.mapper.BizMemberMapper;
+import com.github.weibao.model.BizMember;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * @Create 16/2/5,下午10:47
+ * @Author dongzhukai
+ */
+@Service
+public class AccountService {
+    @Autowired
+    private BizMemberMapper bizMemberMapper;
+
+    public BizMember get(Integer id) {
+        return bizMemberMapper.selectByPrimaryKey(id);
+    }
+
+    public BizMember get(String accountTelephone, String accountPassword){
+        BizMember bizMember = new BizMember();
+        bizMember.setTelphone(accountTelephone);
+        MD5 md5 = new MD5();
+        bizMember.setPassword(md5.encrypt(accountPassword));
+
+        BizMember account = bizMemberMapper.selectOne(bizMember);
+
+        return account;
+    }
+
+}

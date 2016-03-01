@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        ">
+
+
+    <bean id="dataSourceBiz" class="org.apache.tomcat.jdbc.pool.DataSource"
+          destroy-method="close">
+        <property name="poolProperties">
+            <bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+                <!-- 基本属性 url、user、password -->
+                <property name="url" value="${biz.jdbc.url}"/>
+                <property name="driverClassName" value="${jdbc.driverClassName}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.pass}"/>
+
+                <property name="jmxEnabled" value="${jmxEnabled}"/>
+                <property name="validationInterval" value="${validationInterval}"/>
+                <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+                <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}"/>
+                <!-- 配置初始化大小、最小、最大 -->
+                <property name="maxActive" value="${maxActive}"/>
+                <property name="initialSize" value="${initialSize}"/>
+                <property name="maxIdle" value="${maxIdle}"/>
+                <property name="minIdle" value="${minIdle}"/>
+                <!-- 配置获取连接等待超时的时间 -->
+                <property name="maxWait" value="${maxWait}"/>
+
+                <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
+                <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+                <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"/>
+
+                <property name="logAbandoned" value="${logAbandoned}"/>
+                <property name="removeAbandoned" value="${removeAbandoned}"/>
+                <property name="jdbcInterceptors" value="${jdbcInterceptors}"/>
+
+                <property name="validationQuery" value="${validationQuery}"/>
+                <property name="testOnBorrow" value="${testOnBorrow}"/>
+                <property name="testOnReturn" value="${testOnReturn}"/>
+                <property name="testWhileIdle" value="${testWhileIdle}"/>
+
+
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="dataSourceAccount" class="org.apache.tomcat.jdbc.pool.DataSource"
+          destroy-method="close">
+        <property name="poolProperties">
+            <bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+                <property name="url" value="${account.jdbc.url}"/>
+                <property name="driverClassName" value="${jdbc.driverClassName}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.pass}"/>
+                <property name="jmxEnabled" value="${jmxEnabled}"/>
+                <property name="validationInterval" value="${validationInterval}"/>
+                <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}"/>
+                <property name="maxActive" value="${maxActive}"/>
+                <property name="initialSize" value="${initialSize}"/>
+                <property name="maxWait" value="${maxWait}"/>
+                <property name="maxIdle" value="${maxIdle}"/>
+                <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
+                <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"/>
+                <property name="minIdle" value="${minIdle}"/>
+                <property name="logAbandoned" value="${logAbandoned}"/>
+                <property name="removeAbandoned" value="${removeAbandoned}"/>
+                <property name="jdbcInterceptors" value="${jdbcInterceptors}"/>
+                <property name="validationQuery" value="${validationQuery}"/>
+                <property name="testOnBorrow" value="${testOnBorrow}"/>
+                <property name="testOnReturn" value="${testOnReturn}"/>
+                <property name="testWhileIdle" value="${testWhileIdle}"/>
+            </bean>
+        </property>
+    </bean>
+
+</beans>
+

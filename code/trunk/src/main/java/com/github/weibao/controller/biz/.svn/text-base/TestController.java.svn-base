@@ -1,0 +1,33 @@
+package com.github.weibao.controller.biz;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+
+
+/**
+ * @Create 16/2/17,下午6:35
+ * @Author dongzhukai
+ */
+public class TestController {
+    public static void main(String[] args) {
+
+       Document doc = null;
+       try {
+           doc = Jsoup.connect("http://news.sina.com.cn/c/sz/2016-02-17/doc-ifxpmpqp7869454.shtml")
+                            .get();
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+       //System.out.println(doc);
+        Elements eles=doc.getElementsByClass("page-header");
+
+        String a=eles.text();
+
+        System.out.println(a);
+
+   }
+
+}

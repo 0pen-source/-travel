@@ -1,0 +1,61 @@
+package com.github.weibao.mapper;
+
+import com.github.weibao.model.AgencyItems;
+import com.github.weibao.model.AgencyStaffs;
+import com.github.weibao.model.ext.AgencyCompanyExt;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * Created by zwd-apple on 2016/1/14.
+ */
+public interface AgencyCompanyMapperExt {
+
+    /**
+     * 根据登录用户ID查询公司
+     *
+     * @param accountId
+     * @return
+     */
+    List<AgencyCompanyExt> selectCompanyByAccountId(int accountId);
+
+    /**
+     * 根据登录用户ID和公司ID查找公司详细信息
+     *
+     * @param accountId
+     * @param companyId
+     * @return
+     */
+    AgencyCompanyExt selectCompanyByAccountIdCompanyId(@Param("accountId")int accountId,@Param("companyId") int companyId);
+
+    /**
+     * 根据登录用户ID和公司ID查找服务
+     *
+     * @param accountId
+     * @param companyId
+     * @return
+     */
+    List<AgencyItems> selectItemByAccountIdCompanyId(@Param("accountId") int accountId, @Param("companyId") int companyId);
+
+    /**
+     * 根据登录用户ID和公司ID查找联系人
+     *
+     * @param accountId
+     * @param companyId
+     * @return
+     */
+    List<AgencyStaffs> selectStaffByAccountIdCompanyId(int accountId, int companyId);
+
+    /**
+     * 根据登录用户ID,公司ID和服务ID查找联系人
+     *
+     * @param accountId
+     * @param companyId
+     * @param itemId
+     * @return
+     */
+    List<AgencyStaffs> selectStaffByAccountIdCompanyIdItemId(int accountId, int companyId, int itemId);
+
+
+}

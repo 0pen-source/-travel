@@ -1,0 +1,48 @@
+package com.github.weibao.mapper;
+
+import com.github.weibao.model.AgencyCompany;
+import com.github.weibao.model.AgencyItems;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+
+/**
+ * @Create 16/2/1,上午11:28
+ * @Author dongzhukai
+ */
+ @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:spring-config.xml" , "classpath:spring-mybatis.xml"})
+public class AgencyCompanyMapperExtTest {
+    @Autowired
+    private AgencyCompanyMapperExt agencyCompanyMapperExt;
+
+    @Autowired
+    private AgencyCompanyMapper agencyCompnayMapper;
+
+
+    @Test
+    public void testUpdate() throws Exception{
+        AgencyCompany company = new AgencyCompany();
+        company.setCompanyId(403);
+        company.setIsDeleted("1");
+        agencyCompnayMapper.updateByPrimaryKeySelective(company);
+        //agencyCompnayMapper.updateByPrimaryKey(company);
+
+    }
+
+    @Test
+    public void testselectItemByAccountIdCompanyId() throws Exception {
+        List<AgencyItems> list = agencyCompanyMapperExt.selectItemByAccountIdCompanyId(107,397);
+        System.out.println();
+    }
+
+    @Test
+    public void testSelectStaffByAccountIdCompanyId() throws Exception{
+        agencyCompanyMapperExt.selectStaffByAccountIdCompanyId(107,397);
+        System.out.println();
+    }
+}

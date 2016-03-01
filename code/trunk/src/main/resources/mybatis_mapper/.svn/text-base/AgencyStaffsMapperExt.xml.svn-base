@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.weibao.mapper.AgencyStaffsMapperExt">
+    <resultMap id="agencyStaffsResultMap" type="com.github.weibao.model.AgencyStaffs">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="staff_Id" jdbcType="INTEGER" property="staffId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="post" jdbcType="VARCHAR" property="post"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="weichat" jdbcType="VARCHAR" property="weichat"/>
+        <result column="account_Id" jdbcType="INTEGER" property="accountId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="is_deleted" jdbcType="CHAR" property="isDeleted"/>
+        <result column="weichatCode_filename" jdbcType="VARCHAR" property="weichatcodeFilename"/>
+        <result column="head_filename" jdbcType="VARCHAR" property="headFilename"/>
+        <result column="weichatCode" jdbcType="LONGVARBINARY" property="weichatcode"/>
+        <result column="head" jdbcType="LONGVARBINARY" property="head"/>
+    </resultMap>
+
+    <select id="selectByItemId" resultMap="agencyStaffsResultMap">
+        select s.staff_Id, s.intro,s.name, s.qq, s.email,s.gender,s.head_filename,s.weichatCode_filename,s.phone,s.post
+        from agency_staffs s,agency_items_has_staffs h
+        where s.staff_Id = h.staff_Id and s.is_deleted = '-1' and h.item_Id = #{itemId}
+    </select>
+
+
+    <update id="removeStaffsBatch" parameterType="java.util.List">
+        UPDATE agency_staffs SET is_deleted = '1' WHERE staff_Id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.staffId}
+        </foreach>
+    </update>
+</mapper>

@@ -1,0 +1,112 @@
+package com.github.weibao.service;
+
+import com.github.weibao.mapper.CityMapper;
+import com.github.weibao.mapper.CityMapperExt;
+import com.github.weibao.mapper.CountyMapper;
+import com.github.weibao.mapper.ProvinceMapper;
+import com.github.weibao.model.City;
+import com.github.weibao.model.County;
+import com.github.weibao.model.Province;
+import com.github.weibao.model.ext.CityExt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+
+/**
+ * Created by zwd-apple on 2016/1/7.
+ */
+@Service
+public class AreaService {
+    @Autowired
+    CityMapper cityMapper;
+
+    @Autowired
+    CityMapperExt cityMapperExt;
+
+    @Autowired
+    ProvinceMapper provinceMapper;
+
+    @Autowired
+    CountyMapper countyMapper;
+
+    public List<Province> getAllProvince() {
+        List<Province> listProvince = provinceMapper.selectAll();
+        return listProvince;
+    }
+
+    public List<City> getCityByProvinceCode(String provinceCode) {
+        City city = new City();
+        city.setProvincecode(provinceCode);
+        List<City> cityList = cityMapper.select(city);
+        return cityList;
+
+    }
+
+    public List<County> getCountyByCityCode(String cityCode) {
+        County county = new County();
+        county.setCitycode(cityCode);
+        List<County> countyList = countyMapper.select(county);
+        return countyList;
+    }
+
+    public Province getProvinceByCode(String optionvalue) {
+        Province province = new Province();
+        province.setCode(optionvalue);
+        province = provinceMapper.selectOne(province);
+        return province;
+    }
+
+    public List<City> getAllCity() {
+        List<City> listCity = cityMapper.selectAll();
+        return listCity;
+    }
+
+
+    public List<CityExt> selectExtList() {
+        List<CityExt> listCityExt = cityMapperExt.selectExt();
+        return listCityExt;
+    }
+
+    public List getCity(String provincecode) {
+        //获取市区
+        String cityCode = null;
+        if (StringUtils.isEmpty(provincecode)) {
+            throw new NullPointerException("城市编码为NULL.");
+        }
+
+        String cityType = "1"; //1表示不是直辖市
+
+        switch (Integer.valueOf(provincecode)) {
+            case 110000:
+                cityCode = "110100";
+                cityType = "0";
+                break;
+            case 120000:
+                cityCode = "120100";
+                cityType = "0";
+                break;
+            case 310000:
+                cityCode = "310100";
+                cityType = "0";
+                break;
+            case 500000:
+                cityCode = "500100";
+                cityType = "0";
+                break;
+
+            default:
+                cityCode = provincecode;
+
+                break;
+        }
+
+        if (!"1".equals(cityType)) {
+            return getCountyByCityCode(cityCode);
+        } else {
+            return getCityByProvinceCode(provincecode);
+        }
+
+    }
+}

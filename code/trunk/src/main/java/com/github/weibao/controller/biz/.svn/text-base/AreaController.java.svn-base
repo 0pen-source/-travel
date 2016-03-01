@@ -1,0 +1,82 @@
+package com.github.weibao.controller.biz;
+
+import com.github.weibao.model.City;
+import com.github.weibao.model.County;
+import com.github.weibao.model.Province;
+import com.github.weibao.service.AreaService;
+import com.github.weibao.service.CompanyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
+
+/**
+ * Created by dongzhukai on 16/1/9.
+ */
+@Controller
+@RequestMapping("area")
+public class AreaController {
+    private Logger logger = LoggerFactory.getLogger(AreaController.class);
+    @Autowired
+    CompanyService companyService;
+    @Autowired
+    AreaService areaService;
+
+
+    //@RequestMapping(value = "/release_addCompany/{companyName}")
+    //@ResponseBody
+    //public Json Release_addCompany(@PathVariable("companyName") String companyName) {
+    //    logger.info("------Release_添加公司 INFO-----");
+    //    System.out.println("--------" + companyName + "----------");
+    //    Boolean companyBoolean = companyService.addCompanyOnRelease(companyName);
+    //    AgencyCompany agencyCompany = new AgencyCompany();
+    //    agencyCompany.setCompanyName(companyName);
+    //    List<AgencyCompany> list = new ArrayList<AgencyCompany>();
+    //    list.add(agencyCompany);
+    //    if (companyBoolean == true) {
+    //        return new Json(true, "success", list);
+    //    }
+    //    return new Json(false, "false", null);
+    //}
+
+    @RequestMapping(value = "/provinces",method = RequestMethod.GET)
+    public ResponseEntity getAllProvince() {
+        List<Province> provinceList = areaService.getAllProvince();
+        return new ResponseEntity(provinceList, HttpStatus.OK);
+    }
+
+    /**
+     * zwd
+     * 根据省份获取城市
+     *
+     * @param provinceCode
+     * @return
+     */
+    @RequestMapping(value = "/cities/{provinceCode}",method = RequestMethod.GET)
+    public ResponseEntity getCityByProvinceCode(@PathVariable String provinceCode) {
+
+        List<City> cityList = areaService.getCityByProvinceCode(provinceCode);
+        return new ResponseEntity(cityList, HttpStatus.OK);
+    }
+
+    /**
+     * 根据城市获取区域
+     *
+     * @param cityCode
+     * @return
+     */
+    @RequestMapping(value = "/counties/{cityCode}",method = RequestMethod.GET)
+    public ResponseEntity getCountyByCityCode(@PathVariable String cityCode) {
+        List<County> countyList = areaService.getCountyByCityCode(cityCode);
+        return new ResponseEntity(countyList, HttpStatus.OK);
+    }
+
+}
+

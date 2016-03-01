@@ -1,0 +1,27 @@
+package com.github.weibao.service;
+
+import com.github.weibao.controller.vo.UploadDemoVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * @Create 16/2/19,下午11:31
+ * @Author dongzhukai
+ */
+@Service
+public class UploadDemoService {
+    private Logger logger = LoggerFactory.getLogger(UploadDemoService.class);
+
+    @Autowired
+    private UploadFileService uploadFileService;
+
+    public boolean uploadForm(UploadDemoVo demo) throws Exception {
+        demo.validateFile();
+        uploadFileService.upload(demo.getImgFile());
+        return true;
+    }
+
+
+}

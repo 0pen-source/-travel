@@ -1,0 +1,12 @@
+package com.github.weibao.mapper;
+
+import com.github.weibao.model.AgencyStaffs;
+
+import java.util.List;
+
+/**
+ * Created by wb on 2016-02-22.
+ */
+public interface AgencyItemsToStaffsMapper {
+List<AgencyStaffs> selectAllStaffes(String itemId);
+}

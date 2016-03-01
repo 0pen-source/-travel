@@ -1,0 +1,208 @@
+package com.github.weibao.controller.biz;
+
+import com.github.weibao.exception.FrontParameterException;
+import com.github.weibao.exception.ServiceException;
+import com.github.weibao.model.AgencyItems;
+import com.github.weibao.model.ext.AgencyItemsExt;
+import com.github.weibao.service.CompanyService;
+import com.github.weibao.service.ItemsService;
+import com.github.weibao.service.StaffsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+
+/**
+ * Created by zwd-apple on 2016/1/6.
+ */
+@RestController
+@RequestMapping("item")
+public class ItemController {
+    private Logger logger = LoggerFactory.getLogger(ItemController.class);
+
+    @Autowired
+    CompanyService companyService;
+
+    @Autowired
+    ItemsService itemsService;
+
+    @Autowired
+    StaffsService staffsService;
+
+    /**
+     * zwd-apple
+     * 服务信息插入
+     *
+     * @param agencyItems
+     * @return
+     */
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public ModelAndView insertItems(AgencyItems agencyItems,Integer code,String companyName) {
+        if (null == agencyItems) {
+            throw new NullPointerException("agencyItems参数为null");
+        }
+        if (null == code || "".equals(code)) {
+            throw new NullPointerException("code参数为null");
+        }
+        if (StringUtils.isEmpty(agencyItems.getCost()) || StringUtils.isEmpty(agencyItems.getItemName())) {
+            throw new NullPointerException("服务的价格不能为null");
+        }
+        List<AgencyItems> isItemNamesList=itemsService.isItemNames(agencyItems.getItemName(),agencyItems.getCompanyId());
+        if(isItemNamesList.size()==0){
+        try {
+            Boolean isSucess = itemsService.insertItems(agencyItems,code);
+            if (isSucess) {
+                return new ModelAndView("forward:/item/query");
+            }
+        } catch (ServiceException e) {
+            logger.debug("公司[" + agencyItems.getCompanyId() + "]插入服务失败!");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }}else{
+            return new ModelAndView("forward:/w_toAddItem?insertItemErro=对不起,该公司下已经有该服务,请核对服务名称是否重复");
+        }
+        return null;
+    }
+
+
+    /**
+     * 根据companyId查询服务
+     *
+     * @param
+     * @return ModelAndView
+     * @throws FrontParameterException
+     */
+    @RequestMapping("query")
+    public ModelAndView selectItems(String companyId,String companyName,String insertItemErro)  {
+        logger.debug("=====================================companyName后台传入的值是:  "+companyName);
+        logger.info("--根据companyId查询服务--INFO级别:");
+        if (StringUtils.isEmpty(companyName) ) {
+            throw new NullPointerException("前端页面传入comapanyName为null.");
+        }
+        if( StringUtils.isEmpty(companyId)){
+            throw new NullPointerException("前端页面传入comapanyId为null.");
+        }
+
+        List<AgencyItemsExt> agencyItemsList = itemsService.selectItems(Integer.valueOf(companyId));
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("w_showItem");
+        mv.addObject("agencyItemsList", agencyItemsList);
+        mv.addObject("companyName", companyName);
+        mv.addObject("companyId", companyId);
+        mv.addObject("insertItemErro", insertItemErro);
+        return mv;
+    }
+
+    //*****************************
+
+
+    /**
+     * 删除服务
+     *
+     * @param itemId
+     * @param companyId
+     * @throws FrontParameterException
+     */
+    @RequestMapping("remove")
+    public ModelAndView removeItems(String itemId, String companyId,String companyName)  {
+        logger.debug("=====================================companyName后台传入的值是"+companyName);
+        if (null == itemId || "".equals(itemId)) {
+            throw new NullPointerException("itemId不能为null");
+        }
+        if (null == companyId || "".equals(companyId)) {
+            throw new NullPointerException("companyId不能为null");
+        }
+        if (null == companyName || "".equals(companyName)) {
+            throw new NullPointerException("companyName不能为null");
+        }
+
+        Boolean isSucess = itemsService.removeItem(Integer.valueOf(itemId));
+
+        if (isSucess) {
+            logger.debug("公司[" + companyId + "]删除服务序号"+itemId+"成功!");
+            return new ModelAndView("forward:/item/query");
+            //return new ModelAndView("redirect:/item/query?companyId=" + companyId+"&companyName="+companyName);
+        } else {
+            logger.debug("公司[" + itemId + "],删除失败,Service返回值false");
+            return null;
+        }
+
+
+    }
+
+    /**
+     * zwd
+     * 先将要编辑的服务数据显示到页面
+     *
+     * @param itemId
+     * @return
+     */
+    @RequestMapping("w_toEditItem")
+    public ModelAndView toEditItem(Integer itemId,String companyName,String insertItemErro) {
+        if (itemId == null || "".equals(itemId)) {
+            throw new NullPointerException("itemId不能为null");
+        }
+        if (companyName == null || equals(companyName)) {
+            throw new NullPointerException("companyName不能为null");
+        }
+        AgencyItems agencyItems = itemsService.findItemById(itemId);
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("w_editItem");
+        mv.addObject("agencyItems", agencyItems);
+        mv.addObject("companyName",companyName);
+        mv.addObject("insertItemErro",insertItemErro);
+        return mv;
+    }
+
+    /**
+     * 更新服务
+     *
+     * @param agencyItems
+     * @return
+     * @throws FrontParameterException
+     * @throws ServiceException
+     */
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public ModelAndView updateItemsById(AgencyItems agencyItems,String companyName,String olditemName) {
+        logger.debug("=====================================companyName后台传入的值是" + companyName);
+        if (null == companyName) {
+            throw new NullPointerException("前端页面传入comapanyName为null.");
+        }
+        if (null == agencyItems) {
+            throw new NullPointerException("前端页面传入参数为null.");
+        }
+        if(olditemName.equals(agencyItems.getItemName())){
+            boolean isSucess = itemsService.updateItemsById(agencyItems);
+            if (isSucess) {
+                logger.debug("服务[" + agencyItems.getItemId() + "]修改成功!");
+                return new ModelAndView("forward:/item/query");
+            } else {
+                logger.debug("服务[" + agencyItems.getItemId() + "]修改失败!");
+                return null;
+            }
+        }else {
+            List<AgencyItems> isItemNamesList = itemsService.isItemNames(agencyItems.getItemName(), agencyItems.getCompanyId());
+            if (isItemNamesList.size() == 0) {
+                boolean isSucess = itemsService.updateItemsById(agencyItems);
+                if (isSucess) {
+                    logger.debug("服务[" + agencyItems.getItemId() + "]修改成功!");
+                    return new ModelAndView("forward:/item/query");
+                } else {
+                    logger.debug("服务[" + agencyItems.getItemId() + "]修改失败!");
+                    return null;
+                }
+            } else {
+                return new ModelAndView("forward:/item/w_toEditItem?insertItemErro=对不起,该公司下已经有该服务,请核对服务名称是否重复");
+            }
+        }
+
+
+    }
+}

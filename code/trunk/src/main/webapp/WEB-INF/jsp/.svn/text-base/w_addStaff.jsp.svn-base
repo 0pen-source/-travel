@@ -1,0 +1,189 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午8:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!doctype html>
+<html class="no-js">
+<jsp:include page="common/w_head.jsp"/>
+<body>
+<jsp:include page="common/w_header_b.jsp"/>
+<!-- sidebar start -->
+<!-- sidebar end -->
+<br>
+<!-- content start -->
+<div class="admin-content">
+
+    <div class="am-u-lg-12">
+        <div class="am-u-sm-9 am-u-sm-centered">
+            <div class="wb-panel-fc">
+                <label>添加联系人信息</label>
+                <hr>
+                <div class="am-g">
+                    <div class="am-u-sm-12 am-u-md-12  ">
+                        <form action="${ctx}/staff/insert" id="form-staff" method="post" enctype="multipart/form-data"
+                              class="am-form am-form-horizontal">
+                            <input type="hidden" id="staffBindCompanyId" value="${agencyItems.companyId}" name="companyId"/>
+                            <input type="hidden" id="staffBindItemId" value="${agencyItems.itemId}" name="itemId"/>
+                            <input type="hidden" id="staffId" value="$" name="mystaffId"/>
+                            <input type="hidden" id="itemName" value="${itemName}" name="itemName"/>
+                            <input type="hidden" id="companyName" value="${companyName}" name="companyName"/>
+                            <div class="am-form-group">
+                                <label for="name" class="am-u-sm-3 am-form-label"><span style="color: #ff0000">*</span>联系人姓名</label>
+                                <div class="am-form-group am-u-sm-9">
+                                    <input type="text" id="name" name="name" placeholder="请输入联系人姓名(必填哦)" required>
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <label for="staffPhone" class="am-u-sm-3 am-form-label"><span
+                                        style="color: #ff0000">*</span> &nbsp;手机号</label>
+                                <div class="am-form-group am-u-sm-9">
+                                    <input type="text" name="phone" id="staffPhone" placeholder="请输入联系人手机号(必填哦)"
+                                           pattern="^\s*1\d{10}\s*$" required/>
+                                </div>
+                            </div>
+
+
+
+                            <div class="am-form-group">
+                                <label for="staffQQ" class="am-u-sm-3 am-form-label">QQ</label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" name="qq" id="staffQQ" placeholder="请输入联系人QQ号码">
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <label for="email" class="am-u-sm-3 am-form-label">邮箱</label>
+                                <div class="am-u-sm-9">
+                                    <input type="email" id="email" name="email" placeholder="请输入联系人邮箱 ">
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <label for="post" class="am-u-sm-3 am-form-label">职位</label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" id="post" name="post" placeholder="请输入联系人职位">
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <label for="intro" class="am-u-sm-3 am-form-label">自我介绍</label>
+                                <div class="am-u-sm-9">
+                                    <textarea class="" rows="5" name="intro" id="intro"
+                                              placeholder="请输入自我介绍"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <label for="headImgFile" class="am-u-sm-3 am-form-label">头像</label>
+                                <div class="am-u-sm-9">
+                                    <input type="file" id="headImgFile" name="headImgFile">
+                                    <p class="am-form-help">请选择要上传的图片文件...</p>
+                                </div>
+                            </div>
+
+
+                            <div class="am-form-group">
+                                <label for="weixinImgFile" class="am-u-sm-3 am-form-label">二维码</label>
+                                <div class="am-u-sm-9">
+                                    <input type="file" id="weixinImgFile" name="weixinImgFile">
+                                    <p class="am-form-help">请选择要上传的图片文件...</p>
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <div class="am-u-sm-9 am-u-sm-push-3">
+                                    <button type="submit" class="am-btn am-btn-primary">保存人员</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <%--<jsp:include page="common/w_customer.jsp"/>--%>
+        </div>
+
+
+        <div class="am-form-group am-u-sm-10">
+
+        </div>
+
+        <div class="am-g">
+
+        </div>
+
+        <!-- content end -->
+
+    </div>
+
+    <br>
+    <!--在这里编写你的代码-->
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="${ctx}/js/jquery.min.js"></script>
+    <!--<![endif]-->
+    <!--[if lte IE 8 ]>
+    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+    <script src="${ctx}/js/amazeui.ie8polyfill.min.js"></script>
+    <![endif]-->
+    <script src="${ctx}/js/amazeui.min.js"></script>
+    <script src="${ctx}/js/app.js"></script>
+    <script>
+        $(function () {
+            $('#form-staff').validator({
+//      H5validation: false,
+//      patterns: {
+//        phone: /^1((3|5|8){1}\d{1}|70)\d{8}$/,
+//      },
+//      H5validation: false,
+                onValid: function (validity) {
+                    $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+                },
+
+                onInValid: function (validity) {
+                    var $field = $(validity.field);
+                    var $group = $field.closest('.am-form-group');
+                    var $alert = $group.find('.am-alert');
+                    // 不使用插件内置的提示信息
+                    //var msg = $field.data('validationMessage') || this.getValidationMessage(validity);
+                    // 使用自定义的提示信息]
+                    if ($(validity.field).attr('name') == 'name') {
+                        msg = '请填写联系人姓名';
+                    }
+                    if ($(validity.field).attr('name') == 'phone') {
+                        msg = '请填写正确的手机号码';
+                    }
+
+                    if ($(validity.field).attr('name') == 'email') {
+                        msg = '请填写联系人邮箱';
+                    }
+                    if ($(validity.field).attr('name') == 'cost') {
+                        msg = '请填写联系人手机号';
+                    }
+                    if ($(validity.field).attr('name') == 'intro') {
+                        msg = '请填写联系人QQ号';
+                    }
+                    if ($(validity.field).attr('name') == 'weixinImgFile') {
+                        msg = '请上传联系人微信二维码图片';
+                    }
+
+                    if (!$alert.length) {
+                        $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+                        appendTo($group);
+                    }
+
+                    $alert.html(msg).show();
+                }
+            });
+        });
+    </script>
+    <jsp:include page="common/w_footer.jsp"/>
+</body>
+</html>

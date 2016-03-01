@@ -1,0 +1,23 @@
+var strFullPath = window.document.location.href;
+var strPath = window.document.location.pathname;
+var pos = strFullPath.indexOf(strPath);
+var prePath = strFullPath.substring(0, pos);
+var postPath = strPath.substring(0, strPath.substr(1).indexOf("/") + 1);
+var ctx = postPath;
+
+(function ($) {
+    'use strict';
+
+    $(function () {
+        var $fullText = $('.admin-fullText');
+        $('#admin-fullscreen').on('click', function () {
+            $.AMUI.fullscreen.toggle();
+        });
+
+        $(document).on($.AMUI.fullscreen.raw.fullscreenchange, function () {
+            $fullText.text($.AMUI.fullscreen.isFullscreen ? '退出全屏' : '开启全屏');
+        });
+    });
+})(jQuery);
+
+

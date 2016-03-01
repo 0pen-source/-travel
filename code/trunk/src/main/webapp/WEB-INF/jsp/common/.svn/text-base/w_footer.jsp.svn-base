@@ -1,0 +1,29 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午11:47
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<footer class="footer">
+
+    <p>CopyRight©2016 <a href="http://www.weibaobeijing.com" target="_blank">北京微宝网络科技有限公司.</a>京ICP备15007047</p>
+    <span>咨询电话：4000-110-543</span>
+    <span>QQ群：292577932</span>
+    <span>客服邮箱：1204143963@qq.com</span>
+    <%--<p>京ICP备15007047</p>--%>
+</footer>
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="${ctx}/js/jquery.min.js"></script>
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="${ctx}/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="${ctx}/js/amazeui.min.js"></script>
+<script src="${ctx}/js/app.js"></script>
+

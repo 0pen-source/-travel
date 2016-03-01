@@ -1,0 +1,135 @@
+package com.github.weibao.service;
+
+import com.github.weibao.Contants;
+import com.github.weibao.exception.ServiceException;
+import com.github.weibao.mapper.AgencyItemsMapper;
+import com.github.weibao.mapper.AgencyItemsMapperExt;
+import com.github.weibao.mapper.AgencyStaffsMapperExt;
+import com.github.weibao.mapper.ItemPriceMapper;
+import com.github.weibao.model.AgencyItems;
+import com.github.weibao.model.AgencyStaffs;
+import com.github.weibao.model.Dictionary;
+import com.github.weibao.model.ItemPrice;
+import com.github.weibao.model.ext.AgencyItemsExt;
+import org.aspectj.weaver.ast.Expr;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Condition;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
+
+import static tk.mybatis.mapper.entity.Example.*;
+
+/**
+ * Created by zwd-apple on 2016/1/8.
+ */
+@Service
+public class ItemsService {
+
+    @Autowired
+    AgencyItemsMapper agencyItemsMapper;
+
+    @Autowired
+    AgencyItemsMapperExt agencyItemsMapperExt;
+
+    @Autowired
+    ItemPriceMapper itemPriceMapper;
+
+    @Autowired
+    AgencyStaffsMapperExt agencyStaffsMapperExt;
+
+    public boolean insertItems(AgencyItems agencyItems,Integer code) throws ServiceException {
+        try {
+            agencyItems.setIsDeleted("-1");
+            if (agencyItemsMapper.insert(agencyItems) == 1) {
+                //稍后运用copy方法copy相同属性
+                ItemPrice itemPrice = new ItemPrice();
+                itemPrice.setItemId(agencyItems.getItemId());
+                itemPrice.setUnit(code);
+                itemPrice.setUnitPrice(agencyItems.getCost());
+                if(itemPriceMapper.insert(itemPrice) == 1) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            throw new ServiceException(e.getCause());
+        }
+    }
+
+    public boolean removeItem(Integer itemId) {
+
+        try {
+            AgencyItems agencyItems = new AgencyItems();
+            agencyItems.setItemId(itemId);
+            agencyItems.setIsDeleted(String.valueOf(Contants.IS_DELETED));
+            int updateStadus = agencyItemsMapper.updateByPrimaryKeySelective(agencyItems);
+            if (updateStadus == 1) {
+                List<AgencyStaffs> agencyStaffsList = agencyStaffsMapperExt.selectByItemId(itemId);
+                if(agencyStaffsList.size()!=0 ){
+                    agencyStaffsMapperExt.removeStaffsBatch(agencyStaffsList);
+                }
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+                return false;
+    }
+
+    public List<AgencyItemsExt> queryStaff(List<Integer> itemIdList) throws ServiceException {
+        try {
+            return agencyItemsMapperExt.selectStaff(itemIdList);
+        } catch (Exception e) {
+            throw new ServiceException(e.getCause());
+        }
+    }
+
+    public List<AgencyItemsExt> selectItems(Integer companyId) {
+        AgencyItemsExt agencyItemsExt = new AgencyItemsExt();
+        agencyItemsExt.setCompanyId(companyId);
+//        List<AgencyItems> listAgencyItems = agencyItemsMapper.select(agencyItems);
+            List<AgencyItemsExt> listAgencyItems =  agencyItemsMapperExt.selectItemHasUnit(agencyItemsExt);
+//        ItemPrice itemPrice = new ItemPrice();
+        return listAgencyItems;
+    }
+
+    public AgencyItems selectItemsByPrimaryKey(Integer itemId) {
+        AgencyItems agencyItenns = agencyItemsMapper.selectByPrimaryKey(itemId);
+        return agencyItenns;
+    }
+
+    public boolean updateItemsById(AgencyItems agencyItems) {
+        agencyItemsMapper.updateByPrimaryKeySelective(agencyItems);
+        int isSucess = agencyItemsMapper.updateByPrimaryKeySelective(agencyItems);
+        if (isSucess == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public AgencyItems findItemById(Integer itemId) {
+        try {
+            AgencyItems agencyItems = agencyItemsMapper.selectByPrimaryKey(itemId);
+            return agencyItems;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<AgencyItems> isItemNames(String  itemName,int companyId) {
+        String isDeleted="-1";
+        Condition condition = new Condition(AgencyItems.class);
+        condition.or().andEqualTo("itemName",itemName).andEqualTo("isDeleted",isDeleted).andEqualTo("companyId",companyId);
+//        condition.or().andEqualTo("isDeleted",isDeleted);
+
+        List<AgencyItems> isItemNamesList=agencyItemsMapper.selectByExample(condition);
+
+        return isItemNamesList;
+    }
+}

@@ -1,0 +1,172 @@
+<%@ page import="com.github.weibao.Contants" %>
+<%@ page import="com.github.weibao.model.BizMember" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午11:22
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%
+  String path = request.getContextPath();
+  HttpSession session1 = request.getSession();
+  BizMember account = (BizMember) session1.getAttribute(Contants.CURRENT_USER);
+
+//  System.out.println("====" + path);
+//  String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+//  String exit = "exit";
+//  // 获得当前路径以及"直接父路径"的所有Cookie对象,如果没有任何Cookie的话,则返回null
+//  Cookie[] cookies = request.getCookies();
+//  //Cookie cookie1 = cookies[0];
+//  ///cookie1.setDomain(".http://www.weibaobeijing.com");
+//  //String a  = cookie1.getValue();
+//  //out.println(a);
+//  String value = "";
+//  // 遍历数组,获得具体的Cookie
+//  if (cookies == null) {
+//
+//  } else {
+//    for (int i = 0; i < cookies.length; i++) {
+//      // 获得具体的Cookie
+//      Cookie cookie = cookies[i];
+//      // 获得Cookie的名称
+//      if (cookie.getName().equals("username")) {
+//        value = cookie.getValue();
+//        exit = "login";
+//      } else {
+//
+//      }
+//
+//      String name = cookie.getName();
+//
+////        out.print("Cookie名:"+name+" &nbsp; Cookie值:"+value+"<br>"+cookie.getMaxAge());
+//    }
+//  }
+%>
+<%--<script src="${ctx}/js/jquery.min.js"></script>--%>
+<%--<script src="${ctx}/js/bd.js"></script>--%>
+<%--<script src="${ctx}/js/sso.js"></script>--%>
+
+<%--<% if (exit.equals("exit")) {--%>
+<%--%>--%>
+
+<%--<script type="text/javascript">--%>
+<%--$.ssoLogout('<%=path%>');--%>
+
+<%--</script>--%>
+<%--<%}%>--%>
+<header class="am-topbar am-topbar-fixed-top">
+  <div class="am-header">
+    <h1 class="am-topbar-brand">
+      <a href="${ctx}/">微宝&nbsp;|&nbsp;
+        <small>创业服务交易平台</small>
+      </a>
+    </h1>
+
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only" data-am-collapse="{target: '#collapse-head'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+    <div class="am-collapse am-topbar-collapse" id="collapse-head">
+
+      <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-left admin-header-list" style="margin-left: 100px;">
+
+        <li>
+          <a ui-sref="my-published-new" href="${ctx}/w_toAddCompany"><i class="fa fa-plus-circle"></i> 添加新的公司</a>
+        </li>
+        <li>
+          <a ui-sref="my-published-list" href="${ctx}/company/w_toAgencyCompany"><i class="fa fa-reorder"></i> 我的公司</a>
+        </li>
+        <%--<li>--%>
+        <%--<a ui-sref="my-talents" href="/my-talents"><i class="fa fa-group"></i> 我的人脉</a>--%>
+        <%--</li>--%>
+        <%--<li>--%>
+        <%--<a href="http://www.kuaima.co"><i class="fa fa-angle-double-left"></i> 前台首页</a>--%>
+        <%--</li>--%>
+
+      </ul>
+      <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+        <%
+          //        if (value.isEmpty() && value.equals("")) {
+          if (null == account) {
+        %>
+        <%--<div class="am-topbar-right">--%>
+        <%--<button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm"><span class="am-icon-pencil"></span> 注册</button>--%>
+        <%--</div>--%>
+
+        <div class="am-topbar-right">
+          <a class="am-btn am-btn-primary am-topbar-btn am-btn-sm" href="${ctx}/w_toLogin"><span class="am-icon-user"></span> 登录</a>
+        </div>
+
+        <%} else {%>
+
+        <%--<li><a href="javascript:;"><span class="am-icon-envelope-o"></span> 收件箱 <span class="am-badge am-badge-warning">5</span></a></li>--%>
+        <%--<li class="am-dropdown" data-am-dropdown="">--%>
+        <%--<a class="am-dropdown-toggle" data-am-dropdown-toggle="" href="javascript:;">--%>
+        <%--<span class="am-icon-user"></span> <%=account.getTelphone()%> <span class="am-icon-caret-down"></span>--%>
+        <%--</a>--%>
+        <%--<ul class="am-dropdown-content">--%>
+        <%--<li><a href="#"><span class="am-icon-user"></span> 个人中心</a></li>--%>
+        <%--<li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>--%>
+        <%--<li><a href="${ctx}/account/loginout"><span class="am-icon-power-off"></span> 退出</a></li>--%>
+        <%--</ul>--%>
+        <%--</li>--%>
+        <li class=""><span class="am-icon-user"><%=account.getTelphone()%></span></li>
+        <li class=""><a href="${ctx}/account/loginout"><span class=""></span> <span class="">退出</span></a></li>
+        <%--<li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>--%>
+        <%}%>
+      </ul>
+
+    </div>
+
+
+  </div>
+</header>
+
+<%--<header class="am-topbar admin-header">--%>
+  <%--<h1 class="am-topbar-brand">--%>
+    <%--<a href="${ctx}/">微宝&nbsp;|&nbsp;--%>
+      <%--<small>创业服务交易平台</small>--%>
+    <%--</a>--%>
+  <%--</h1>--%>
+
+  <%--<button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>--%>
+
+  <%--<div class="am-topbar-collapse am-collapse" id="topbar-collapse">--%>
+
+    <%--<ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">--%>
+      <%--<%--%>
+        <%--//        if (value.isEmpty() && value.equals("")) {--%>
+        <%--if (null == account) {--%>
+      <%--%>--%>
+      <%--&lt;%&ndash;<li><a href="javascript:;"><span class="am-icon-envelope-o"></span> 收件箱 <span class="am-badge am-badge-warning">5</span></a></li>&ndash;%&gt;--%>
+      <%--<li class="am-dropdown" data-am-dropdown="">--%>
+        <%--<a class="am-dropdown-toggle" data-am-dropdown-toggle="" href="${ctx}/w_toLogin">--%>
+          <%--<span class="am-icon-user"></span> 登录 <span class="am-icon-caret-down"></span>--%>
+        <%--</a>--%>
+      <%--</li>--%>
+      <%--<%} else {%>--%>
+      <%--<li class="am-dropdown">--%>
+        <%--<p class="am-dropdown-toggle" href="${ctx}/account/loginout">--%>
+          <%--<span class="am-icon-user"></span> <span><%=account.getTelphone()%></span>--%>
+        <%--</p>--%>
+      <%--</li>--%>
+      <%--<li class="am-dropdown">--%>
+        <%--<a class="am-dropdown-toggle" href="${ctx}/account/loginout">--%>
+          <%--<span class=""></span> 退出 <span class=""></span>--%>
+        <%--</a>--%>
+      <%--</li>--%>
+      <%--<%}%>--%>
+      <%--&lt;%&ndash;<li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>&ndash;%&gt;--%>
+    <%--</ul>--%>
+    <%--<ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">--%>
+
+      <%--&lt;%&ndash;<li><a href="javascript:;"><span class="am-icon-envelope-o"></span> 收件箱 <span class="am-badge am-badge-warning">5</span></a></li>&ndash;%&gt;--%>
+
+      <%--&lt;%&ndash;<li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>&ndash;%&gt;--%>
+    <%--</ul>--%>
+
+  <%--</div>--%>
+<%--</header>--%>
+

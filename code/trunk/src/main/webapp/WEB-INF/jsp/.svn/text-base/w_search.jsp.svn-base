@@ -1,0 +1,188 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午8:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!doctype html>
+<html class="no-js">
+<jsp:include page="common/w_head.jsp"/>
+<body>
+<jsp:include page="common/w_header.jsp"/>
+<div class="am-g am-container">
+  <%--<jsp:include page="common/select-search.jsp"/>--%>
+  <%--<div class="am-g">--%>
+
+  <div class="am-u-sm-10  am-u-sm-centered" style="font-size: 14px">
+    <div style="width: 590px; height: 50px; margin:30px 80px 10px 80px;">
+      <form class="am-form" action="${ctx}/search" method="post">
+        <input type="hidden" name="nowpage">
+        <input type="hidden" name="city">
+        <div class="am-form-group am-fl" style="width: 90px;">
+          <select id="doc-select-1" name="provincecode">
+            <option selected="selected" value="${provincecode}">${province.name}</option>
+            <c:if test="${!empty provinceList}">
+              <c:forEach items="${provinceList}" var="province">
+                <option value="${province.code}">${province.name}</option>
+              </c:forEach>
+            </c:if>
+          </select>
+          <span class="am-form-caret"></span>
+        </div>
+        <div><input type="hidden" name="nowpage" value="1"></div>
+        <div class="am-fl" style="width: 400px;"><input type="text" name="searchKey" placeholder="请输入查找关键字,例如:工商注册、代理记账、财税咨询"></div>
+
+        <div class="am-fl">
+          <button type="submit" style="width: 100px;" class="am-btn am-btn-primary">&nbsp;&nbsp;搜索&nbsp;&nbsp;</button>
+        </div>
+        <%--</fieldset>--%>
+      </form>
+    </div>
+    <div style="width: 590px; height: 50px; margin:10px 20px 10px 80px; font-size: 1.6rem;">
+
+      <div class="showaddress am-container">
+        <span>
+          全部地区</span>
+          <span id="cityId"><c:forEach items="${citylist}" var="city">
+            <span><a href="search?provincecode=${provincecode}&searchKey=${info}&city=${city.name}&nowpage=1" >${city.name}</a></span>
+          </c:forEach></span>
+
+      </div>
+    </div>
+
+  </div>
+  <div class="am-u-sm-10  am-u-sm-centered" style="font-size: 14px">
+    <hr>
+    <c:if test="${empty selectlist}">
+      <div class="am-u-sm-10">
+        <div class="" style="padding: 100px 100px 300px 300px;">
+          <strong>亲,没有您要的结果.</strong>
+          <br>
+        </div>
+      </div>
+    </c:if>
+
+    <c:if test="${!empty selectlist}">
+
+      <c:forEach items="${selectlist}" var="selectall" varStatus="status">
+        <%--<div class="wb-panel-fc">--%>
+        <%--<div class="am-tab-panel am-fade am-active am-in" id="tab3">--%>
+        <div class="am-g am-margin-top-sm">
+          <div class="am-u-sm-8 am-u-md-8 am-text-left">
+            <a href="${ctx}/w_search_detail?itemId=${selectall.itemId}" target="_blank">${selectall.itemName}</a>
+          </div>
+          <div class="am-u-sm-4 am-u-md-4 am-text-right">
+              ${selectall.unitPrice}元/${selectall.value}
+          </div>
+        </div>
+
+        <div class="am-g am-margin-top-sm">
+          <div class="am-u-sm-8 am-u-md-8 am-text-left">
+              <pre>${selectall.intro}</pre>
+          </div>
+          <div class="am-u-sm-4 am-u-md-4 am-u-end">
+              <%--${selectall.intro}&nbsp;--%>
+          </div>
+        </div>
+
+        <div class="am-g am-margin-top-sm">
+          <div class="am-u-sm-8 am-u-md-8 am-text-left">
+            <%--<c:if test="${!empty selectall.agencyCompany.url}">--%>
+              <%--<a href="http://${selectall.agencyCompany.url}"> ${selectall.companyName}&nbsp;</a>--%>
+            <%--</c:if>--%>
+             <a href="${ctx}/w_search_detail?itemId=${selectall.itemId}" target="_blank"> ${selectall.companyName}</a>
+          </div>
+          <div class="am-u-sm-4 am-u-md-4 am-u-end">
+              <%--${selectall.companyName}&nbsp;--%>
+          </div>
+        </div>
+
+        <hr>
+
+      </c:forEach>
+      <ul class="am-pagination am-pagination-centered">
+
+        <c:choose>
+          <c:when test="${nowpage==1}">
+            <li>首页</li>
+            <li>«</li>
+          </c:when>
+          <c:otherwise>
+            <li><a href="search?provincecode=${provincecode}&searchKey=${info}&city=${city}&nowpage=1">首页</a></li>
+            <li><a href="search?provincecode=${provincecode}&searchKey=${info}&city=${city}&nowpage=${nowpage-1}">«</a></li>
+          </c:otherwise>
+        </c:choose>
+
+        <c:forEach begin="1" end="${page}" var="num">
+          <c:choose>
+            <c:when test="${nowpage==num}">
+              [${num}]
+            </c:when>
+            <c:otherwise>
+              <li><a href="search?provincecode=${provincecode}&searchKey=${info}&city=${city}&nowpage=${num}">${num}</a></li>
+            </c:otherwise>
+          </c:choose>
+        </c:forEach>
+
+        <c:choose>
+          <c:when test="${nowpage==page}">
+            <li>»</li>
+            <li>尾页</li>
+          </c:when>
+          <c:otherwise>
+            <li><a href="search?provincecode=${provincecode}&searchKey=${info}&city=${city}&nowpage=${nowpage+1}">»</a></li>
+            <li><a href="search?provincecode=${provincecode}&searchKey=${info}&city=${city}&nowpage=${page}">尾页</a></li>
+          </c:otherwise>
+        </c:choose>
+
+          <%--<li class="am-disabled"><a href="#">&laquo;</a></li>--%>
+          <%--<li class="am-active"><a href="#">1</a></li>--%>
+          <%--<li><a href="#">2</a></li>--%>
+          <%--<li><a href="#">3</a></li>--%>
+          <%--<li><a href="#">4</a></li>--%>
+          <%--<li><a href="#">5</a></li>--%>
+          <%--<li><a href="#">&raquo;</a></li>--%>
+      </ul>
+    </c:if>
+  </div>
+
+
+  <br>
+
+
+</div>
+
+<!--在这里编写你的代码-->
+
+<jsp:include page="common/w_footer.jsp"/>
+</body>
+</html>
+<script type="text/javascript">
+  //  页面加载就开始执行*/
+  $(document).ready(function () {
+    $("#doc-select-1").change(function () {
+      var title = $("#doc-select-1").find("option:selected").val();
+      //alert(title);
+//      $('#hiden0').html('');
+//      $('#hiden0').val(title);//追加value值
+      $.get("getCityByProvinceIdJson/" + title, function (data) {
+        if (data.status) {
+//                    var result = "<span class=\"am-badge am-badge-primary\"><h3>全部地区</h3></span>";
+          var result = "";
+          var cityTest = "<div> </div>"
+          $.each(data.obj, function (n, value) {
+            result += "  <span><a href=\"search?provincecode=" + title + "&searchKey=${info}&city=" + value.name + "&nowpage=1\">"
+                    + value.name + "</a></span>   ";
+//                        result +="  <span class=\"am-badge\">"+value.name+"</span>   ";
+          });
+          $("#cityId").html('');
+          $("#cityId").append(result);
+        }
+      }, "json");
+    });
+  });
+</script>

@@ -1,0 +1,12 @@
+package com.github.weibao;
+
+public class Contants {
+
+	public static final String CURRENT_USER="account";
+	public static final String  CURRENT_USERID="accountId";
+	public static final String  CURRENT_USER_REFERER="referer";
+	public static  final  int DBNUMBER=10;
+	public static final int IS_DELETED=1;
+	public static final int IS_NOT_DELETED=-1;
+
+}

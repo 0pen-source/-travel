@@ -1,0 +1,22 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午11:22
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div class="am-u-sm-3">
+  <div class="wb-panel-fr wb-fz14">
+    <h5>客户服务</h5>
+    <%--<hr>--%>
+    <%--<p>客服邮箱：</p>--%>
+    <%--<p>1204143963@qq.com</p>--%>
+    <%--<p>咨询电话：</p><p>4000-110-543</p>--%>
+    <%--<p> QQ群：</p><p>292577932</p>--%>
+    <hr>
+    <p>客服邮箱：1204143963@qq.com</p>
+    <p>咨询电话：4000-110-543</p>
+    <p> QQ群：292577932</p>
+  </div>
+</div>

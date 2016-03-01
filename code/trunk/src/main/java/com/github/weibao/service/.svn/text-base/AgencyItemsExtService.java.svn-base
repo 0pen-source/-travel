@@ -1,0 +1,91 @@
+package com.github.weibao.service;
+
+import com.github.weibao.controller.vo.StaffVo;
+import com.github.weibao.mapper.AgencyItemsMapperExt;
+import com.github.weibao.mapper.AgencyItemsToStaffsMapper;
+import com.github.weibao.model.AgencyStaffs;
+import com.github.weibao.model.ext.AgencyItemsExt;
+import com.github.weibao.utils.PropertyUtil;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by wb on 2016-01-12.
+ */
+@Service
+public class AgencyItemsExtService {
+    @Autowired
+    AgencyItemsMapperExt agencyItemsMapperExt;
+    @Autowired
+    AgencyItemsToStaffsMapper agencyItemsToStaffsMapper;
+
+    public List<AgencyItemsExt> selectAll(String optionvalue, String info, String city, int firstdb, int dbnumber) {
+        List<AgencyItemsExt> selectlist = agencyItemsMapperExt.selectAll(optionvalue, info, city, firstdb, dbnumber);
+
+
+        return selectlist;
+    }
+
+//    public List selectCollect(int user){
+//        List collectlist = agencyItemsMapperExt.selectCollect(user);
+//        return collectlist;
+//    }
+
+    public int getPageNumber(String provincecode, String infoext, String cityext, int dbnumber) {
+
+//        RowBounds rowBounds=new RowBounds(0,4);
+//        City city=new City();
+//        city.setProvincecode("130000");
+//        int page=cityMapper.selectCount(city);
+//        List<City> list=cityMapper.selectByRowBounds(city, rowBounds);
+//        for (City s:list) {
+//            System.out.println(page);
+//            System.out.println( s.getName());
+//        }
+        int page= agencyItemsMapperExt.selectPage(provincecode,infoext,cityext);
+//        AgencyItems agencyItems=new AgencyItems();
+//        int page=agencyItemsMapper.selectCount(agencyItems);
+//        System.out.println(1111111);
+//        System.out.println(page);
+//        System.out.println(222222);
+        page=((page-1)/dbnumber)+1;
+
+        return page;
+    }
+
+    public List<AgencyItemsExt> selectAllExt(String itemId) {
+        List<AgencyItemsExt> selectAllExtList= agencyItemsMapperExt.selectAllExt(itemId);
+        return selectAllExtList;
+    }
+
+    public List<StaffVo> selectAllStaffs(String itemId) {
+        List<AgencyStaffs> staffsList=agencyItemsToStaffsMapper.selectAllStaffes(itemId);
+        List<StaffVo> staffVoList = new ArrayList<StaffVo>(staffsList.size());
+
+        AgencyStaffs agencyStaffs = null;
+        String path = PropertyUtil.getInstance().getValue("image_server_path");
+        for(int i = 0; i < staffsList.size(); i++){
+            agencyStaffs = staffsList.get(i);
+            StaffVo staffVo = new StaffVo();
+            BeanUtils.copyProperties(agencyStaffs,staffVo);
+            if(!StringUtils.isEmpty(agencyStaffs.getHeadFilename())){
+                staffVo.setHeadImgSrc(path + agencyStaffs.getHeadFilename());
+
+
+            }
+            if(!StringUtils.isEmpty(agencyStaffs.getWeichatcodeFilename())){
+                staffVo.setWeixinImgSrc(path + agencyStaffs.getWeichatcodeFilename());
+            }
+
+
+            staffVoList.add(staffVo);
+        }
+
+        return staffVoList;
+    }
+}

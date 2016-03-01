@@ -1,0 +1,426 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午8:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!doctype html>
+<html class="no-js">
+<head>
+    <style>
+        .z_company_error {
+            display: block;
+            width: 583px;
+            line-height: 40px;
+            margin-bottom: 5px;
+            /*border: 1px solid #ffbdbe;*/
+            /*border-radius: 0px;*/
+            /*background: #ffebeb;*/
+            color: #f00;
+        }
+    </style>
+</head>
+<jsp:include page="common/w_head.jsp"/>
+<body>
+<jsp:include page="common/w_header_b.jsp"/>
+<%--<div class="am-cf admin-main">--%>
+<!-- sidebar start -->
+<!-- sidebar end -->
+<br>
+<!-- content start -->
+<div class="admin-content">
+
+
+    <div class="am-u-lg-12">
+
+        <div class="am-u-sm-9 am-u-md-9  am-u-sm-centered">
+
+            <c:if test="${!empty agencyCompanyExt}">
+
+                <div class="wb-panel-fc">
+                    <label>编辑公司信息</label>
+                    <hr>
+                        <%--<div class="am-g">--%>
+
+                        <%--<div class="am-u-sm-12 am-u-md-12">--%>
+                        <%--<label>修改公司资料</label>--%>
+                        <%--<hr>--%>
+                        <%--<form action="${ctx}/company/update" id="form-company" class="am-form am-form-horizontal" method="post">--%>
+                        <%--&lt;%&ndash;onsubmit="return checkForm();"&ndash;%&gt;--%>
+                        <%--<input name="accountId" value=" ${sessionScope.account.id}" type="hidden">--%>
+                        <%--<input name="companyId" value="${agencyCompanyExt.companyId}" type="hidden"/>--%>
+
+                        <%--<label for="companyName" class="am-u-sm-2 am-form-label">公司名称 </label>--%>
+                        <%--<div class="am-form-group am-u-sm-10">--%>
+                        <%--<input type="text" name="companyName" id="companyName" value="${agencyCompanyExt.companyName}" placeholder="请输入你要建立的公司名称(必填) " required/>--%>
+                        <%--</div>--%>
+
+                        <%--<label for="url" class="am-u-sm-2 am-form-label js-pattern-url">公司网址 </label>--%>
+                        <%--<div class="am-form-group am-u-sm-10">--%>
+                        <%--<input type="url" name="url" id="url" value="${agencyCompanyExt.url}" placeholder="输入你公司的网址(填写正确的网址) "/>--%>
+                        <%--&lt;%&ndash;<small>邮箱你懂得...</small>&ndash;%&gt;--%>
+                        <%--</div>--%>
+
+                        <%--<label for="lawPerson" class="am-u-sm-2 am-form-label">公司法人 </label>--%>
+                        <%--<div class="am-form-group am-u-sm-10">--%>
+                        <%--<input type="text" name="lawPerson" id="lawPerson" value="${agencyCompanyExt.lawPerson}" placeholder="请填写公司的法人 "/>--%>
+                        <%--</div>--%>
+
+                        <%--<label for="telephone" class="am-u-sm-2 am-form-label js-pattern-mobile">公司规模</label>--%>
+                        <%--<div class="am-form-group am-u-sm-10">--%>
+                        <%--<input type="text" name="companyScale" id="" value="${agencyCompanyExt.companyScale}" placeholder="请填写公司人员规模" maxlength="15"/>--%>
+                        <%--</div>--%>
+
+                        <%--<label for="telephone" class="am-u-sm-2 am-form-label js-pattern-mobile">公司电话</label>--%>
+                        <%--<div class="am-form-group am-u-sm-10">--%>
+                        <%--<input type="text" name="telephone" id="telephone" value="${agencyCompanyExt.telephone}" placeholder="请填写公司的电话" maxlength="15"/>--%>
+                        <%--</div>--%>
+
+                        <%--<label class="am-u-sm-2 am-form-label">公司地址 </label>--%>
+                        <%--<div class="am-form-group am-u-sm-3">--%>
+
+                        <%--<select id="province" name="province" required>--%>
+                        <%--<c:choose>--%>
+                        <%--<c:when test="${agencyCompanyExt.province != null}">--%>
+                        <%--<option value="">选择省份</option>--%>
+                        <%--</c:when>--%>
+                        <%--<c:otherwise>--%>
+                        <%--<option value=${agencyCompanyExt.province}>${agencyCompanyExt.provinceName}</option>--%>
+                        <%--</c:otherwise>--%>
+                        <%--</c:choose>--%>
+                        <%--</select>--%>
+                        <%--</div>--%>
+                        <%--<div class="am-form-group am-u-sm-3">--%>
+                        <%--<select data-placeholder="城市" name="city" id="city" class="form-control" data-rel="chosen">--%>
+                        <%--<c:choose>--%>
+                        <%--<c:when test="${agencyCompanyExt.province != null}">--%>
+                        <%--<option value="">选择城市</option>--%>
+                        <%--</c:when>--%>
+                        <%--<c:otherwise>--%>
+                        <%--<option value=${agencyCompanyExt.city}>${agencyCompanyExt.cityName}</option>--%>
+                        <%--</c:otherwise>--%>
+                        <%--</c:choose>--%>
+
+                        <%--</select>--%>
+                        <%--</div>--%>
+                        <%--<div class="am-form-group am-u-sm-3">--%>
+                        <%--<select data-placeholder="区域" name="county" id="county" class="form-control" data-rel="chosen">--%>
+                        <%--<c:choose>--%>
+                        <%--<c:when test="${agencyCompanyExt.province != null}">--%>
+                        <%--<option value="">选择县区</option>--%>
+                        <%--</c:when>--%>
+                        <%--<c:otherwise>--%>
+                        <%--<option value=${agencyCompanyExt.county}>${agencyCompanyExt.countyName}</option>--%>
+                        <%--</c:otherwise>--%>
+                        <%--</c:choose>--%>
+
+                        <%--</select>--%>
+                        <%--</div>--%>
+                        <%--<label class="am-u-sm-2 am-form-label"></label>--%>
+                        <%--<div class="am-form-group am-u-sm-10" style="margin-top: -30px;">--%>
+                        <%--&nbsp;&nbsp;<input type="text" name="address" id="address" value="${agencyCompanyExt.address}" placeholder="请填写公司的详细地址"/>--%>
+                        <%--</div>--%>
+                        <%--<div class="am-form-group">--%>
+                        <%--<label for="intro" class="am-u-sm-2 am-form-label">公司简介 </label>--%>
+                        <%--<div class="am-u-sm-10">--%>
+                        <%--<textarea class="" rows="10" id="intro" name="intro" placeholder="输入公司简介">${agencyCompanyExt.intro}</textarea>--%>
+                        <%--</div>--%>
+                        <%--</div>--%>
+
+                        <%--<div class="am-margin am-u-sm-9 am-u-sm-push-2">--%>
+                        <%--<input id="sbm-save" type="submit" class="am-btn am-btn-primary am-btn-xs" value="提交修改"/>--%>
+                        <%--<input id="giveup-save" type="button" class="am-btn am-btn-primary am-btn-xs" value="放弃修改"/>--%>
+                        <%--</div>--%>
+                        <%--</form>--%>
+                        <%--</div>--%>
+                        <%--</div>--%>
+
+                        <%----------%>
+                        <%----------%>
+                        <%----------%>
+                        <%----------%>
+                        <%----------%>
+                        <%----------%>
+                        <%----------%>
+                        <%-----------%>
+                        <%-------%>
+                            <span id="error" class="z_company_error" >${companyErro}</span><br>
+                    <div class="am-g">
+
+                        <div class="am-u-sm-12 am-u-md-12  ">
+                            <form action="${ctx}/company/update" id="form-company" class="am-form am-form-horizontal"
+                                  method="post">
+                                    <%--onsubmit="return checkForm();"--%>
+                                <input name="accountId" value=" ${sessionScope.account.id}" type="hidden">
+                                <input name="companyId" value="${agencyCompanyExt.companyId}" type="hidden">
+                                <input name="companyNameOld" value="${agencyCompanyExt.companyName}" type="hidden">
+                                <%--<input name="companyName" value="${companyName}" type="hidden">--%>
+
+                                <div class="am-form-group">
+                                    <label for="companyName" class="am-u-sm-3 am-form-label"><span
+                                            style="color: #ff0000">*</span>公司名称</label>
+                                    <div class="am-form-group am-u-sm-9">
+                                        <input type="text" id="companyName" name="companyName"
+                                               placeholder="输入你公司的名称(填写正确的公司名称)" value="${agencyCompanyExt.companyName}"
+                                               required/>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="url" class="am-u-sm-3 am-form-label">公司网址</label>
+                                    <div class="am-form-group am-u-sm-9">
+                                        <input type="url" id="url" name="url" value="${agencyCompanyExt.url}"
+                                               placeholder="输入你公司的网址(填写正确的网址)"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="am-form-group">
+                                    <label for="lawPerson" class="am-u-sm-3 am-form-label">公司法人</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" name="lawPerson" id="lawPerson"
+                                               value="${agencyCompanyExt.lawPerson}" placeholder="请填写公司的法人"/>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="companyScale" class="am-u-sm-3 am-form-label">公司规模</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="number" name="companyScale" id="companyScale"
+                                               placeholder="请填写公司人员规模(人数)" value="${agencyCompanyExt.companyScale}"
+                                               maxlength="15">
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="telephone" class="am-u-sm-3 am-form-label">公司电话</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" id="telephone" name="telephone"
+                                               value="${agencyCompanyExt.telephone}" placeholder="请填写公司的电话 "
+                                               maxlength="15"/>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="am-u-sm-3 am-form-label"><span
+                                            style="color: #ff0000">*</span> &nbsp;公司地址</label>
+                                    <div class="am-u-sm-3">
+                    <span class="am-form-group">
+                    <select id="province" name="province" required>
+                        <c:choose>
+                            <c:when test="${agencyCompanyExt.province != null}">
+                                <option value=${agencyCompanyExt.province}>${agencyCompanyExt.provinceName}</option>
+
+                            </c:when>
+                            <c:otherwise>
+                                <option value="">选择省份</option>
+                            </c:otherwise>
+                        </c:choose>
+                    </select>
+                      </span>
+                                    </div>
+                                    <div class="am--group am-u-sm-3">
+                                        <span class="am-form-group">
+                                        <select data-placeholder="城市" name="city" id="city" class="form-control"
+                                                data-rel="chosen" required>
+                                            <c:choose>
+                                                <c:when test="${agencyCompanyExt.province != null}">
+                                                    <option value=${agencyCompanyExt.city}>${agencyCompanyExt.cityName}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="">选择城市</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </select>
+                                            </span>
+
+                                    </div>
+                                    <div class="am-form-group am-u-sm-3">
+                                        <span class="am-form-group">
+                                        <select data-placeholder="区域" name="county" id="county" class="form-control"
+                                                data-rel="chosen" required>
+                                            <c:choose>
+                                                <c:when test="${agencyCompanyExt.province != null}">
+                                                    <option value=${agencyCompanyExt.county}>${agencyCompanyExt.countyName}</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <option value="">选择县区</option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </select>
+                                            </span>
+                                    </div>
+                                </div>
+
+
+                                <div class="am-form-group">
+                                    <label for="address" class="am-u-sm-3 am-form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" name="address" id="address"
+                                               value="${agencyCompanyExt.address}" placeholder="请填写公司的详细地址"/>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <label for="intro" class="am-u-sm-3 am-form-label">公司简介</label>
+                                    <div class="am-u-sm-9">
+                                    <textarea class="" rows="10" id="intro" name="intro"
+                                              placeholder="输入公司简介">
+                                            ${agencyCompanyExt.intro}
+                                    </textarea>
+                                    </div>
+                                </div>
+
+
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-9 am-u-sm-push-3">
+                                        <input id="sbm-save" type="submit" class="am-btn am-btn-primary am-btn-xs"
+                                               value="提交修改"/>
+                                        <input id="giveup-save" type="button" class="am-btn am-btn-primary am-btn-xs"
+                                               value="放弃修改"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </c:if>
+
+        </div>
+
+        <%--<jsp:include page="common/w_customer.jsp"/>--%>
+    </div>
+</div>
+<br>
+<!-- content end -->
+
+<%--</div>--%>
+
+<!--在这里编写你的代码-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="${ctx}/js/jquery.min.js"></script>
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="${ctx}/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="${ctx}/js/amazeui.min.js"></script>
+<script src="${ctx}/js/app.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#giveup-save").bind("click", function () {
+            window.location.href = "javascript:history.go(-1);";
+        })
+        // $("#provinceId").options.length = 0;//empty the option
+        $.get("${ctx}/area/provinces", function (data) {
+//      $("#province").append('<option value=\'\'>选择省份</option>')
+            $.each(data, function (index, optiondata) {
+                $("#province").append('<option value=' + optiondata.code + '>' + optiondata.name + '</option>')
+            });
+        });
+        $.get("${ctx}/area/cities/110000", function (data) {
+//      $("#city").append('<option value=\'\'>选择城市</option>')
+            $.each(data, function (index, optiondata) {
+                $("#city").append('<option value=' + optiondata.code + '>' + optiondata.name + '</option>')
+            });
+        });
+        $.get("${ctx}/area/counties/110100", function (data) {
+//      $("#county").append('<option value=\'\'>选择县区</option>')
+            $.each(data, function (index, optiondata) {
+                $("#county").append('<option value=' + optiondata.code + '>' + optiondata.name + '</option>')
+            });
+        });
+
+    });
+
+    $("#province").bind('change', function () {
+//    alert("change   " + $("#province").val());
+        $.get("${ctx}/area/cities/" + $("#province").val(), function (data) {
+            if (data) {
+                var result = "<option value=''>选择城市</option>";
+                $.each(data, function (n, value) {
+                    result += "<option value='" + value.code + "' title=" + value.name + " id=cityOption>" + value.name + "</option>";
+                });
+                $("#city").html('');
+                $("#city").append(result);
+            }
+        })
+    });
+
+    $("#city").bind('change', function () {
+//    alert("change   " + $("#city").val());
+        $.get("${ctx}/area/counties/" + $("#city").val(), function (data) {
+            if (data) {
+                var result = "<option value=''>选择县区</option>";
+                $.each(data, function (n, value) {
+                    result += "<option value='" + value.code + "'>" + value.name + "</option>";
+                });
+                $("#county").html('');
+                $("#county").append(result);
+            }
+        });
+    });
+
+    $(function () {
+        $('#form-company').validator({
+            H5validation: false,
+            patterns: {
+                url: /^(((([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-zA-Z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-zA-Z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-zA-Z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-zA-Z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-zA-Z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-zA-Z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-zA-Z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/,
+            },
+            onValid: function (validity) {
+                $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+            },
+
+            onInValid: function (validity) {
+                var $field = $(validity.field);
+                var $group = $field.closest('.am-form-group');
+                var $alert = $group.find('.am-alert');
+                // 不使用插件内置的提示信息
+                //var msg = $field.data('validationMessage') || this.getValidationMessage(validity);
+                // 使用自定义的提示信息
+                if ($(validity.field).attr('name') == 'companyName') {
+                    msg = '请填写公司名称';
+                }
+                if ($(validity.field).attr('name') == 'url') {
+                    msg = '请填写公司网址';
+                }
+                if ($(validity.field).attr('name') == 'lawPerson') {
+                    msg = '请填写公司法人姓名';
+                }
+                if ($(validity.field).attr('name') == 'companyScale') {
+                    msg = '请填写公司规模';
+                }
+                if ($(validity.field).attr('name') == 'telephone') {
+                    msg = '请填写公司电话';
+                }
+                if ($(validity.field).attr('name') == 'province') {
+                    msg = '请选择省份';
+                }
+                if ($(validity.field).attr('name') == 'city') {
+                    msg = '请选择城市';
+                }
+                if ($(validity.field).attr('name') == 'county') {
+                    msg = '请选择区县';
+                }
+                if ($(validity.field).attr('name') == 'address') {
+                    msg = '请填写公司详细地址';
+                }
+
+                if (!$alert.length) {
+                    $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+                    appendTo($group);
+                }
+
+                $alert.html(msg).show();
+            }
+        });
+    });
+</script>
+<jsp:include page="common/w_footer.jsp"/>
+</body>
+</html>

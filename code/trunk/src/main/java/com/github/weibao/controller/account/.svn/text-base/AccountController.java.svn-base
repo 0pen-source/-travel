@@ -1,0 +1,79 @@
+package com.github.weibao.controller.account;
+
+import com.github.weibao.Contants;
+import com.github.weibao.controller.BaseController;
+import com.github.weibao.model.BizMember;
+import com.github.weibao.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+/**
+ * @Create 16/2/5,下午10:19
+ * @Author dongzhukai
+ */
+@Controller
+@RequestMapping("account")
+public class AccountController extends BaseController {
+
+    @Autowired
+    private AccountService accountService;
+
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public ResponseEntity get(@PathVariable Integer id) {
+        BizMember user = accountService.get(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @RequestMapping("checkAccountAndPassword")
+    public boolean checkAccountAndPassword(String accountTelephone, String accountPassword) {
+        if (null == accountTelephone || null == accountPassword) {
+            throw new NullPointerException("前端页面传入错误!");
+        }
+        //todo: 验证手机号和密码格式
+
+        return true;
+    }
+
+    @RequestMapping("login")
+    public String login(String accountTelephone, String accountPassword, HttpServletRequest request) {
+        BizMember account = accountService.get(accountTelephone, accountPassword);
+        if (null == account) {
+
+            return "redirect:/w_toLogin?msg=1";
+        }
+        //TODO:首先将原来的cookie信息失效
+
+        //获取session
+        HttpSession session = request.getSession();
+        //将用户实体保存在session中
+        session.setAttribute(Contants.CURRENT_USER, account);
+        //TODO:更新用户的最后一次登录时间
+
+        //TODO:如果用户设置了保存用户名密码,则使用cookie来进行保存
+
+        //TODO:如果返回页面不为空返回到指定的返回页面
+
+
+        //跳转到用户上次访问的路径
+        String referer = (String) session.getAttribute(Contants.CURRENT_USER_REFERER);
+        if(null == referer){
+            return "redirect:/";
+        }
+        return "redirect:/" + referer;
+    }
+
+    @RequestMapping("loginout")
+    public String loginout(HttpServletRequest request) {
+        //清空session
+        request.getSession().invalidate();
+
+        return "redirect:/";
+    }
+}

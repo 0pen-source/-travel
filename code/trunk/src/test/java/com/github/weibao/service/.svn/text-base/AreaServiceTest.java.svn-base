@@ -1,0 +1,28 @@
+package com.github.weibao.service;
+
+import com.github.weibao.model.City;
+import com.github.weibao.test.unit.BaseUnitTest;
+import junit.framework.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+/**
+ * Created by zwd-apple on 2016/1/7.
+ */
+public class AreaServiceTest extends BaseUnitTest{
+    @Autowired
+    private AreaService areaService;
+
+    @Test
+    public void testGetCityByProvinceCode() throws Exception {
+        String provinceCode = "130000"; //beijing
+        List<City> list = areaService.getCityByProvinceCode(provinceCode);
+        Assert.assertEquals(11,list.size());
+    }
+
+
+
+
+}

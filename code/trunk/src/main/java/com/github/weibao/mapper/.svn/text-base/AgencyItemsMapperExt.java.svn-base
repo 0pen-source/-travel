@@ -1,0 +1,30 @@
+package com.github.weibao.mapper;
+
+
+import com.github.weibao.model.AgencyStaffs;
+import com.github.weibao.model.ext.AgencyItemsExt;
+import com.github.weibao.model.ext.ItemStaffLink;
+
+import java.util.List;
+
+/**
+ * Created by wb on 2016-01-12.
+ */
+public interface AgencyItemsMapperExt {
+
+    List<AgencyItemsExt> selectStaff(List<Integer> itemIdList);
+    List<AgencyItemsExt> selectAll(String optionvalue, String info, String city, int firstdb, int dbnumber);
+    int selectPage(String provincecode, String infoext, String cityext);
+
+    Integer insertStaffsItemsRelevance(ItemStaffLink itemStaffLink);
+
+    List<AgencyStaffs> selectByItemId(Integer itemId);
+
+    List<AgencyItemsExt> selectItemHasUnit(AgencyItemsExt agencyItemsExt);
+
+    List<AgencyItemsExt> selectAllExt(String itemId);
+
+    void RemoveItemBatch(List<AgencyItemsExt> agencyItemsExtList);
+
+    void removeStaffsBatch(List<AgencyStaffs> agencyStaffsList);
+}

@@ -1,0 +1,15 @@
+package com.github.weibao.mapper;
+
+import com.github.weibao.model.AgencyStaffs;
+
+import java.util.List;
+
+/**
+ * @Create 16/2/21,上午10:23
+ * @Author dongzhukai
+ */
+public interface AgencyStaffsMapperExt {
+    public List<AgencyStaffs> selectByItemId(Integer itemId);
+
+    void removeStaffsBatch(List<AgencyStaffs> agencyStaffsList);
+}

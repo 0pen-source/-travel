@@ -1,0 +1,187 @@
+package com.github.weibao.service;
+
+import com.github.weibao.Contants;
+import com.github.weibao.mapper.AgencyCompanyMapperExt;
+import com.github.weibao.mapper.AgencyCompanyMapper;
+import com.github.weibao.mapper.AgencyItemsMapperExt;
+import com.github.weibao.model.AgencyCompany;
+import com.github.weibao.model.ext.AgencyCompanyExt;
+import com.github.weibao.model.ext.AgencyItemsExt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
+
+/**
+ * Created by chenkaihua on 15-9-15.
+ */
+@Service
+public class CompanyService {
+
+    @Autowired
+    AgencyCompanyMapper agencyCompanyMapper;
+
+    @Autowired
+    private AgencyCompanyMapperExt agencyCompanyMapperExt;
+
+    @Autowired
+    private AgencyItemsMapperExt agencyItemsMapperExt;
+
+    public List<AgencyCompany> queryByAccountId(Integer accountId) {
+        Example example = new Example(AgencyCompany.class);
+
+        return agencyCompanyMapper.selectByExample(example);
+    }
+
+
+    /**
+     * 插入动作前,默认修改'is_deleted'字段为'-1';
+     *
+     * @param company
+     * @return dongzhukai
+     */
+    public int saveCompany(AgencyCompany company)  {
+        try {
+            company.setIsDeleted("-1");
+            Example example = new Example(AgencyCompany.class);
+            example.or().andEqualTo("companyName",company.getCompanyName()).andEqualTo("accountId",company.getAccountId()).andEqualTo("isDeleted","-1");
+            List<AgencyCompany> agencyCompanyList = agencyCompanyMapper.selectByExample(example);
+
+            if (agencyCompanyList.size() == 0) {
+                int companyId = agencyCompanyMapper.insert(company);
+                if (companyId == 1) {
+                    return 0;//retuen:0程序正常,1插入失败,2公司名称不可重复
+                }
+            }
+            else {
+                System.out.println("======测试打印异常======:   公司名称不可重复");
+                return 2;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 1;
+    }
+
+    /**
+     * 删除动作是:(1)修改实体表中的'is_deleted'字段为'1';
+     * (2)中间表物理删除就可以了.
+     *
+     * @param company
+     * @author dongzhukai
+     */
+    public Boolean removeCompany(AgencyCompanyExt company) {
+        //TODO:逻辑删除公司
+        try {
+            company.setIsDeleted(String.valueOf(Contants.IS_DELETED));
+            int updateStatus = agencyCompanyMapper.updateByPrimaryKeySelective(company);
+            if (updateStatus == 1) {
+//                Example example = new Example(AgencyCompany.class);
+//                example.or().andEqualTo("isDeleted",Contants.IS_NOT_DELETED);
+//                List<AgencyCompany> agencyCompanyList = agencyCompanyMapper.selectByExample(example);
+                AgencyItemsExt agencyItemsExt = new AgencyItemsExt();
+                agencyItemsExt.setCompanyId(company.getCompanyId());
+                List<AgencyItemsExt> agencyItemsExtList = agencyItemsMapperExt.selectItemHasUnit(agencyItemsExt);
+                if(agencyItemsExtList.size()!=0){
+                    agencyItemsMapperExt.RemoveItemBatch(agencyItemsExtList);
+                }
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public AgencyCompany findCompanyByCompanyId(Integer companyId) {
+        try {
+            return agencyCompanyMapper.selectByPrimaryKey(companyId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public AgencyCompanyExt findCompanyExtByAccountIdCompanyId(Integer accountId,Integer companyId) {
+        try {
+            return agencyCompanyMapperExt.selectCompanyByAccountIdCompanyId(accountId,companyId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    //public List<AgencyCompanyExt> queryCompanyByAccountId(int accountId) {
+    //    try {
+    //        List<AgencyCompanyExt> agencyCompanyExts = agencyCompanyMapperExt.selectCompanyByAccountId(accountId);
+    //        if (null != agencyCompanyExts && agencyCompanyExts.size() != 0) {
+    //            List<Integer> itemsIdList = null;
+    //            for (int i = 0; i < agencyCompanyExts.size(); i++) {
+    //                itemsIdList = agencyCompanyExts.get(i).getItemsIdList();
+    //
+    //                if (null != itemsIdList && itemsIdList.size() != 0) {
+    //
+    //
+    //                }
+    //            }
+    //        }
+    //        return agencyCompanyExts;
+    //    } catch (Exception e) {
+    //        e.printStackTrace();
+    //    }
+    //
+    //    return null;
+    //}
+
+    public List<AgencyCompany> findCompanyByAccountId(Integer accountId) {
+//        AgencyCompany agencyCompany = new AgencyCompany();
+//        agencyCompany.setAccountId(id);
+//        List<AgencyCompany> agencyCompanyList = agencyCompanyMapper.select(agencyCompany);
+//        return agencyCompanyList;
+
+        Example example = new Example(AgencyCompany.class);
+        example.createCriteria()
+                .andCondition("account_Id="+accountId)
+                .andCondition("is_deleted=1");
+
+        List<AgencyCompany> agencyCompanyList = agencyCompanyMapper.selectByExample(example);
+        return agencyCompanyList;
+    }
+
+    public AgencyCompany selectWshowCompany(AgencyCompany agencyCompany) {
+        agencyCompany = agencyCompanyMapper.selectByPrimaryKey(agencyCompany);
+        return agencyCompany;
+    }
+
+    public int updateCompanyById(AgencyCompany agencyCompany,String companyNameOld) {
+        Example example = new Example(AgencyCompany.class);
+        example.or().andEqualTo("companyName",agencyCompany.getCompanyName()).andEqualTo("accountId",agencyCompany.getAccountId()).andEqualTo("isDeleted","-1");
+        List<AgencyCompany> agencyCompanyList = agencyCompanyMapper.selectByExample(example);
+
+        if (agencyCompanyList.size() == 0) {
+            agencyCompanyMapper.updateByPrimaryKeySelective(agencyCompany);
+            int isSucess = agencyCompanyMapper.updateByPrimaryKeySelective(agencyCompany);
+            if (isSucess == 1) {
+                return 0;//status:0:正常,1,错误,2重复
+            }
+        }
+        else {
+            if(companyNameOld.equals( agencyCompany.getCompanyName())){
+                agencyCompanyMapper.updateByPrimaryKeySelective(agencyCompany);
+                int isSucess = agencyCompanyMapper.updateByPrimaryKeySelective(agencyCompany);
+                if (isSucess == 1) {
+                    return 0;//status:0:正常,1,错误,2重复
+                }
+            }
+            return 2;
+             }
+        return 1;
+    }
+
+
+}

@@ -1,0 +1,2 @@
+(1) 修改app.properties文件.
+(2) 修改jdbc-mysql.properties文件

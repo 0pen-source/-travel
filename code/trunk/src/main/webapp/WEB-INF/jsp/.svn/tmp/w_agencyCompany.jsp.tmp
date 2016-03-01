@@ -1,0 +1,335 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午8:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!doctype html>
+<html class="no-js">
+<jsp:include page="common/w_head.jsp"/>
+<body>
+<jsp:include page="common/w_header_b.jsp"/>
+
+<%--<div class="am-cf admin-main">--%>
+
+<!-- sidebar start -->
+<%--<jsp:include page="common/left_menu.jsp"/>--%>
+<!-- sidebar end -->
+
+<!-- content start -->
+<br>
+
+<div class="am-container">
+
+
+  <div class="am-u-sm-12">
+
+<<<<<<< .mine
+    <div class="am-u-sm-9">
+=======
+    <c:if test="${empty agencyCompanyList}">
+      <%--<div class="am-u-sm-9">--%>
+      <div class="wb-panel-fc" style="padding: 100px 100px 300px 300px;">
+>>>>>>> .r6519
+
+        <strong>亲,您还没有公司.</strong>
+        <br>
+
+        <strong><a href="${ctx}/w_toAddCompany">请添加新的公司!</a></strong>
+
+      </div>
+      <%--</div>--%>
+    </c:if>
+
+    <c:if test="${!empty agencyCompanyList}">
+
+      <c:forEach items="${agencyCompanyList}" var="agencyCompany">
+        <div class="wb-panel-fc">
+            <%--<div class="am-tab-panel am-fade am-active am-in" id="tab3">--%>
+          <c:if test="${!empty agencyCompany.companyName}">
+            <c:if test="${!empty agencyCompany.companyName}">
+              <div class="am-g am-margin-top-sm">
+                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                  公司名称：
+                </div>
+                <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                    ${agencyCompany.companyName}&nbsp;
+                </div>
+              </div>
+            </c:if>
+          </c:if>
+          <div class="am-g am-margin-top-sm">
+
+<<<<<<< .mine
+              <c:if test="${!empty agencyCompany.address}">
+              <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                公司地址：
+              </div>
+              <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                  ${agencyCompany.address}&nbsp;
+              </div>
+=======
+            <c:if test="${!empty agencyCompany.address}">
+            <div class="am-u-sm-4 am-u-md-3 am-text-right">
+              公司地址：
+>>>>>>> .r6519
+            </div>
+<<<<<<< .mine
+            </c:if>
+=======
+            <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                ${agencyCompany.address}&nbsp;
+            </div>
+          </div>
+          </c:if>
+>>>>>>> .r6519
+
+<<<<<<< .mine
+            <c:if test="${!empty agencyCompany.url}">
+              <div class="am-g am-margin-top-sm">
+                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                  公司网址：
+                </div>
+                <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                    ${agencyCompany.url}&nbsp;
+                </div>
+=======
+          <c:if test="${!empty agencyCompany.url}">
+            <div class="am-g am-margin-top-sm">
+              <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                公司网址：
+>>>>>>> .r6519
+              </div>
+<<<<<<< .mine
+            </c:if>
+=======
+              <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                <a href="http://${agencyCompany.url}"> ${agencyCompany.url}&nbsp;</a>
+              </div>
+            </div>
+>>>>>>> .r6519
+          </c:if>
+
+<<<<<<< .mine
+            <c:if test="${!empty agencyCompany.telephone}">
+              <div class="am-g am-margin-top-sm">
+                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                  联系电话：
+                </div>
+                <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                    ${agencyCompany.telephone}&nbsp;
+                </div>
+=======
+          <c:if test="${!empty agencyCompany.telephone}">
+            <div class="am-g am-margin-top-sm">
+              <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                联系电话：
+>>>>>>> .r6519
+              </div>
+            </c:if>
+          </c:if>
+
+<<<<<<< .mine
+            <c:if test="${!empty agencyCompany.companyScale}">
+              <div class="am-g am-margin-top-sm">
+                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                  公司规模：
+                </div>
+                <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                    ${agencyCompany.companyScale}&nbsp;
+                </div>
+=======
+          <c:if test="${!empty agencyCompany.companyScale}">
+            <div class="am-g am-margin-top-sm">
+              <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                公司规模：
+>>>>>>> .r6519
+              </div>
+            </c:if>
+          </c:if>
+
+<<<<<<< .mine
+            <c:if test="${!empty agencyCompany.lawPerson}">
+              <div class="am-g am-margin-top-sm">
+                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                  法人代表：
+                </div>
+                <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                    ${agencyCompany.lawPerson}&nbsp;
+                </div>
+=======
+          <c:if test="${!empty agencyCompany.lawPerson}">
+            <div class="am-g am-margin-top-sm">
+              <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                法人代表：
+>>>>>>> .r6519
+              </div>
+            </c:if>
+          </c:if>
+
+<<<<<<< .mine
+            <c:if test="${!empty agencyCompany.intro}">
+              <div class="am-g am-margin-top-sm">
+                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                  公司简介：
+                </div>
+                <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                    ${agencyCompany.intro}&nbsp;
+                </div>
+=======
+          <c:if test="${!empty agencyCompany.intro}">
+            <div class="am-g am-margin-top-sm">
+              <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                公司简介：
+>>>>>>> .r6519
+              </div>
+<<<<<<< .mine
+            </c:if>
+=======
+              <div class="am-u-sm-8 am-u-md-9 am-u-end">
+                  ${agencyCompany.intro}&nbsp;
+              </div>
+            </div>
+>>>>>>> .r6519
+          </c:if>
+
+<<<<<<< .mine
+            <hr>
+            <div class="am-g am-margin-top-sm">
+              <div class="am-btn-toolbar am-fr">
+                  <%--<button type="button" class="am-btn am-btn-default" onclick="addStaff();"><span class=""></span>--%>
+                  <%--<a href="${ctx}/company/w_showCompany?companyId=${agencyCompany.companyId}">进入公司</a>--%>
+                  <%--</button>--%>
+                <button type="button" class="am-btn am-btn-default "
+                        onclick="queryItem(${agencyCompany.companyId},'${agencyCompany.companyName}')">
+                  <span class=""></span>查看服务
+                </button>
+                <button type="button" class="am-btn am-btn-default"
+                        onclick="addItem(${agencyCompany.companyId})"><span class=""></span>新增服务</button>
+=======
+          <hr>
+          <div class="am-g am-margin-top-sm">
+            <div class="am-btn-toolbar am-fr">
+                <%--<button type="button" class="am-btn am-btn-default" onclick="addStaff();"><span class=""></span>--%>
+                <%--<a href="${ctx}/company/w_showCompany?companyId=${agencyCompany.companyId}">进入公司</a>--%>
+                <%--</button>--%>
+              <button type="button" class="am-btn am-btn-default "
+                      onclick="queryItem(${agencyCompany.companyId},'${agencyCompany.companyName}')">
+                <span class=""></span>查看服务
+              </button>
+              <button type="button" class="am-btn am-btn-default"
+                      onclick="addItem(${agencyCompany.companyId})"><span class=""></span>新增服务
+              </button>
+>>>>>>> .r6519
+
+<<<<<<< .mine
+                <button type="button" class="am-btn am-btn-default"
+                        onclick="editCompany(${agencyCompany.companyId})"><span class=""></span>编辑公司
+                </button>
+                <button type="button" class="am-btn am-btn-default"
+                        onclick="removeCompany(${agencyCompany.companyId});"><span
+                        class="am-icon-trash-o"></span> 删除公司
+                </button>
+                  <%----%>
+                <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+                  <div class="am-modal-dialog">
+                    <div class="am-modal-hd">删除该公司</div>
+                    <div class="am-modal-bd">
+                      亲，确定要删除该公司吗？
+                    </div>
+                    <div class="am-modal-footer">
+                      <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                      <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+                    </div>
+                  </div>
+                </div>
+                  <%----%>
+=======
+              <button type="button" class="am-btn am-btn-default"
+                      onclick="editCompany(${agencyCompany.companyId})"><span class=""></span>编辑公司
+              </button>
+              <button type="button" class="am-btn am-btn-default"
+                      onclick="removeCompany(${agencyCompany.companyId});"><span
+                      class="am-icon-trash-o"></span> 删除公司
+              </button>
+                <%----%>
+              <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+                <div class="am-modal-dialog">
+                  <div class="am-modal-hd">删除该公司</div>
+                  <div class="am-modal-bd">
+                    亲，确定要删除该公司吗？
+                  </div>
+                  <div class="am-modal-footer">
+                    <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                    <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+                  </div>
+                </div>
+>>>>>>> .r6519
+              </div>
+                <%----%>
+            </div>
+          </div>
+        </div>
+        <br>
+      </c:forEach>
+
+    </c:if>
+  </div>
+
+<<<<<<< .mine
+    <jsp:include page="common/w_customer.jsp"/>
+  </div>
+=======
+  <%--<jsp:include page="common/w_customer.jsp"/>--%>
+>>>>>>> .r6519
+  <br>
+
+
+</div>
+<!-- content end -->
+<br>
+<%--</div>--%>
+
+<!--在这里编写你的代码-->
+<<<<<<< .mine
+<%--<jsp:include page="common/w_footer.jsp"/>--%>
+=======
+<%--<jsp:include page="common/w_footer.jsp"/>--%>
+<jsp:include page="common/w_footer.jsp"/>
+>>>>>>> .r6519
+</body>
+<script>
+  $(function () {
+
+  });
+  function removeCompany(companyId) {
+    $('#my-confirm').modal({
+      relatedTarget: this,
+      onConfirm: function (options) {
+        location.href = ctx + "/company/w_deleteCompany?companyId=" + companyId;//location.href实现客户端页面的跳转
+
+      },
+      // closeOnConfirm: false,
+      onCancel: function () {
+
+      }
+    });
+  }
+  function queryItem(companyId, companyName) {
+    location.href = ctx + "/item/query?companyId=" + companyId + "&companyName=" + companyName;//location.href实现客户端页面的跳转
+
+  }
+  function addItem(companyId) {
+    location.href = ctx + "/w_toAddItem?companyId=" + companyId;
+
+  }
+  function editCompany(companyId) {
+    location.href = ctx + "/company/w_toEditCompany?companyId=" + companyId;
+  }
+
+</script>
+</html>

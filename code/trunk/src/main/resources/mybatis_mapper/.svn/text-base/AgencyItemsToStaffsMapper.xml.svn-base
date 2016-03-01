@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.weibao.mapper.AgencyItemsToStaffsMapper">
+    <resultMap id="agencyItemsToStaffsResultMap" type="com.github.weibao.model.AgencyStaffs">
+
+            <id column="staff_Id" property="staffId" jdbcType="INTEGER"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="gender" property="gender" jdbcType="VARCHAR"/>
+            <result column="post" property="post" jdbcType="VARCHAR"/>
+            <result column="qq" property="qq" jdbcType="VARCHAR"/>
+            <result column="phone" property="phone" jdbcType="INTEGER"/>
+            <result column="intro" property="intro" jdbcType="VARCHAR"/>
+            <result column="email" property="email" jdbcType="VARCHAR"/>
+            <result column="weichat" property="weichat" jdbcType="CHAR"/>
+            <result column="account_Id" property="accountId" jdbcType="INTEGER"/>
+            <result column="is_deleted" property="isDeleted" jdbcType="CHAR"/>
+            <result column="weichatCode_filename" property="weichatcodeFilename" jdbcType="CHAR"/>
+            <result column="head_filename" property="headFilename" jdbcType="CHAR"/>
+
+    </resultMap>
+    <select id="selectAllStaffes" resultMap="agencyItemsToStaffsResultMap">
+        select
+        d.staff_Id,
+        d.name,
+        d.gender,
+        d.post,
+        d.qq,
+        d.phone,
+        d.intro,
+        d.email,
+        d.weichat,
+        d.account_Id,
+        d.is_deleted,
+        d.weichatCode_filename,
+        d.head_filename
+        from agency_items b
+        left join agency_items_has_staffs c on c.item_Id = b.item_Id
+        left join agency_staffs d on d.staff_Id = c.staff_Id
+        where b.item_Id=#{0}
+         and(d.is_deleted='${@com.github.weibao.Contants@IS_NOT_DELETED}');
+    </select>
+
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.weibao.mapper.AgencyCompanyMapperExt">
+
+    <resultMap type="com.github.weibao.model.ext.AgencyCompanyExt" id="agencyCompanyExt"
+               extends="com.github.weibao.mapper.AgencyCompanyMapper.BaseResultMap">
+        <result column="city_name" jdbcType="VARCHAR" property="cityName"/>
+        <result column="county_name" jdbcType="VARCHAR" property="countyName"/>
+        <result column="province_name" jdbcType="VARCHAR" property="provinceName"/>
+
+    </resultMap>
+
+    <resultMap type="com.github.weibao.model.ext.AgencyCompanyExt" id="agencyCompanyExtResultMap"
+               extends="com.github.weibao.mapper.AgencyCompanyMapper.BaseResultMap">
+        <result column="city_name" jdbcType="VARCHAR" property="cityName"/>
+        <result column="county_name" jdbcType="VARCHAR" property="countyName"/>
+        <result column="province_name" jdbcType="VARCHAR" property="provinceName"/>
+
+        <collection property="itemsIdList" ofType="java.lang.Integer">
+            <id column="item_Id" property="itemId" jdbcType="INTEGER"/>
+        </collection>
+        <collection property="itemsList" ofType="com.github.weibao.model.AgencyItems">
+            <id column="item_Id" property="itemId" jdbcType="INTEGER"/>
+            <result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+            <result column="item_type" property="itemType" jdbcType="INTEGER"/>
+            <result column="cost" property="cost" jdbcType="DECIMAL"/>
+            <result column="max_cost" property="maxCost" jdbcType="DECIMAL"/>
+            <result column="min_cost" property="minCost" jdbcType="DECIMAL"/>
+            <result column="intro" property="intro" jdbcType="VARCHAR"/>
+            <result column="company_Id" property="companyId" jdbcType="INTEGER"/>
+            <result column="is_deleted" property="isDeleted" jdbcType="CHAR"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Company_Column_List">
+        c.company_Id,
+        c.company_name,
+        c.address,
+        c.law_person,
+        c.url,
+        c.telephone,
+        c.company_scale,
+        c.company_type,
+        c.intro,
+        c.province,
+        c.city,
+        c.county
+    </sql>
+    <sql id="Item_Column_List">
+        i.item_Id,
+        i.item_name,
+        i.item_Id,
+        i.cost,
+        i.max_cost,
+        i.min_cost,
+        i.intro
+    </sql>
+
+    <!--<select id="selectItemByAccountIdCompanyId" parameterType="int" resultMap="companyItemsListResultMap">-->
+    <!--SELECT-->
+    <!--c.company_Id,-->
+    <!--c.company_name,-->
+    <!--c.address,-->
+    <!--c.law_person,-->
+    <!--i.item_Id,-->
+    <!--i.item_name,-->
+    <!--i.item_Id,-->
+    <!--i.cost,-->
+    <!--i.max_cost,-->
+    <!--i.min_cost,-->
+    <!--i.intro-->
+    <!--FROM-->
+    <!--agency_company c,-->
+    <!--agency_items i-->
+    <!--WHERE-->
+    <!--c.is_deleted != '1'-->
+    <!--and i.is_deleted != '1'-->
+    <!--and c.company_Id = i.company_Id-->
+    <!--and c.account_Id = #{accountId}-->
+    <!--and c.company_Id = #{companyId}-->
+    <!--</select>-->
+
+    <!--<select id="selectStaffByAccountIdCompanyId" parameterType="int" resultMap="companyStaffsListResultMap">-->
+    <!--SELECT-->
+    <!--c.company_Id,-->
+    <!--c.company_name,-->
+    <!--c.address,-->
+    <!--c.law_person,-->
+    <!--s.name,-->
+    <!--s.staff_Id,-->
+    <!--s.phone,-->
+    <!--s.qq,-->
+    <!--s.email,-->
+    <!--s.weichat-->
+    <!--FROM-->
+    <!--agency_company c,-->
+    <!--agency_staffs s ,-->
+    <!--agency_company_has_staffs cs-->
+    <!--WHERE-->
+    <!--c.account_Id = #{accountId}-->
+    <!--and c.company_Id = #{companyId}-->
+    <!--and c.is_deleted != '1'-->
+    <!--and s.is_deleted != '1'-->
+    <!--and c.company_Id = cs.company_Id ;-->
+    <!--</select>-->
+
+    <select id="selectCompanyByAccountId" parameterType="int" resultMap="agencyCompanyExtResultMap">
+        SELECT<include refid="Company_Column_List"/>,
+        <include refid="Item_Column_List"/>,
+        province.name as province_name,
+        city.name as city_name,
+        county.name as county_name
+        FROM agency_company c,
+        agency_items i,
+        province,
+        city,
+        county
+        WHERE c.account_Id = #{accountId}
+        AND c.company_Id = i.company_Id
+        AND c.province = province.code
+        AND c.city = city.code
+        AND c.county = county.code
+        AND c.is_deleted != '1'
+        AND i.is_deleted != '1'
+    </select>
+
+    <select id="selectCompanyByAccountIdCompanyId" parameterType="int" resultMap="agencyCompanyExt">
+        SELECT<include refid="Company_Column_List"/>,
+        province.name as province_name,
+        city.name as city_name,
+        county.name as county_name
+        FROM agency_company c
+        left join province on c.province = province.code
+        left join city on c.city = city.code
+        left join county on c.county = county.code
+        WHERE c.account_Id = #{accountId}
+        AND c.company_Id = #{companyId}
+        AND c.is_deleted != '1'
+    </select>
+
+    <!--<insert id="insertCompanyStaffLink" parameterType="CompanyStaffLink">-->
+    <!--INSERT INTO agency_company_has_staffs (company_Id,staff_Id) VALUES (#{companyId},#{staffId})-->
+    <!--</insert>-->
+
+
+    <!--<delete id="deleteCompanyStaffLink" parameterType="CompanyStaffLink">-->
+    <!--DELETE FROM agency_company_has_staffs WHERE company_Id =#{companyId} and staff_Id = #{staffId}-->
+    <!--</delete>-->
+
+    <!--<delete id="deleteItemStaffLink" parameterType="ItemStaffLink">-->
+    <!--DELETE FROM agency_items_has_staffs WHERE item_Id =#{itemId} and staff_Id = #{staffId}-->
+    <!--</delete>-->
+
+</mapper>

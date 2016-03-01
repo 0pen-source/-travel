@@ -1,0 +1,186 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<%--<!DOCTYPE html>--%>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Login Page | Amaze UI Example</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="alternate icon" type="image/png" href="${ctx}/i/favicon.png">
+  <link rel="stylesheet" href="${ctx}/css/admin.css">
+  <link rel="stylesheet" href="${ctx}/css/amazeui.min.css"/>
+  <style>
+    .header {
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 200%;
+      color: #333;
+      margin-top: 30px;
+    }
+
+    .header p {
+      font-size: 14px;
+    }
+
+    .z_login_error {
+      display: block;
+      width: 583px;
+      height: 40px;
+      line-height: 40px;
+      margin-bottom: 5px;
+      /*border: 1px solid #ffbdbe;*/
+      /*border-radius: 0px;*/
+      /*background: #ffebeb;*/
+      color: #f00;
+    }
+
+    #vld-tooltip {
+      position: absolute;
+      z-index: 1000;
+      padding: 5px 10px;
+      background: #F37B1D;
+      min-width: 150px;
+      color: #fff;
+      transition: all 0.15s;
+      box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+      display: none;
+    }
+
+    #vld-tooltip:before {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      width: 0;
+      height: 0;
+      margin-left: -8px;
+      content: "";
+      border-width: 0 8px 8px;
+      border-color: transparent transparent #F37B1D;
+      border-style: none inset solid;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="am-g">
+    <h1>微宝</h1>
+    <strong>创业服务交易平台<br/></strong>
+  </div>
+  <hr/>
+</div>
+<div class="am-g">
+  <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+    <%--<h3>登录</h3><span style="color: red">${USER_ERRO}</span>--%>
+    <%--<hr>--%>
+    <%--<div class="am-btn-group">--%>
+      <%--<a href="#" class="am-btn am-btn-secondary am-btn-sm"><i class="am-icon-qq am-icon-sm"></i> QQ</a>--%>
+      <%--<a href="#" class="am-btn am-btn-success am-btn-sm"><i class="am-icon-wechat am-icon-sm"></i> 微信</a>--%>
+      <%--<a href="#" class="am-btn am-btn-primary am-btn-sm"><i class="am-icon-cc-paypal am-icon-sm"></i> 支付宝</a>--%>
+    <%--</div>--%>
+    <br>
+    <br>
+    <form action="${ctx}/account/login" method="post" class="am-form" id="login-form" onsubmit="return checkForm()">
+      <%--<span id="error" class="z_login_error" style="display: none;">亲,用户名和密码信息格式有误请重新填写</span>--%>
+      <span id="error" class="z_login_error" >${error}</span><br>
+      <label for="accountTelephone">用户名:</label>
+      <input type="text" id="accountTelephone" name="accountTelephone" minlength="6" placeholder="用户名为手机号" pattern="(1((3|5|8){1}\d{1}|70)\d{8})$" value="" required>
+      <br>
+      <label for="accountPassword">密码:</label>
+      <input type="password" id="accountPassword" name="accountPassword" minlength="3" placeholder="请输入密码" value="" required>
+      <br>
+      <%--<label for="remember-me">--%>
+        <%--<input id="remember-me" type="checkbox">--%>
+        <%--记住密码--%>
+      <%--</label>--%>
+      <br/>
+      <div class="am-cf">
+        <input type="submit" name="" value="登 录" class="am-btn am-btn-primary am-btn-sm am-fl">
+        <%--<input type="submit" name="" value="忘记密码 ^_^? " class="am-btn am-btn-default am-btn-sm am-fr">--%>
+      </div>
+    </form>
+    <hr>
+    <%--<p>© 2016 北京微宝网络科技有限公司.</p>--%>
+  </div>
+</div>
+<center><div style="margin-top: 140px;"><jsp:include page="common/w_footer.jsp"/></div></center>
+</body>
+
+<script>
+  /**
+   * 验证用户名
+   * @returns {boolean}
+   */
+  function checkUserAccount() {
+    var userAccount = $("#accountTelephone").val();
+//    var re = /^1[3578][0-9]{9}$/;
+    var re = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/;
+    if (re.test(userAccount))
+      return true;
+    else
+      return false;
+
+  }
+  /**
+   * 验证密码
+   * @returns {boolean}
+   */
+  function checkUserPassword() {
+    var userPassword = $("#accountPassword").val();
+    var re = /^\w{3,16}$/;
+    if (re.test(userPassword))
+      return true;
+    else
+      return false;
+
+  }
+  /**
+   * 提交表单前验证 用户名和密码格式 是否匹配
+   * @returns {boolean}
+   */
+  function checkForm() {
+//    alert("username:" + $("#accountTelephone").val() + ",password:" + $("#accountPassword").val());
+    var flag = checkUserAccount() && checkUserPassword();
+    if (flag) {
+      $.ajax({
+        url: "${ctx}/account/checkAccountAndPassword",
+        async: false,
+        cache: false,
+        type: "post",
+        data: {
+          accountTelephone: $("#accountTelephone").val(),
+          accountPassword: $("#accountPassword").val()
+        },
+        dataType: "text",
+        success: function (data) {
+          if (data.isValid == 0) {
+            flag = false;
+          }
+        }
+      })
+    }
+    if (!flag) {
+      $("#error").fadeIn(1500);
+    }
+    return flag;
+
+  }
+  /**
+   * 隐藏错误信息
+
+   function hideMsg(){
+    $("#error").fadeOut(1500);
+}
+   */
+
+</script>
+
+</html>

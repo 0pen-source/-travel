@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.weibao.mapper.AgencyItemsMapperExt">
+
+    <resultMap type="com.github.weibao.model.ext.AgencyItemsExt" id="agencyItemsExtResultMap"
+               extends="com.github.weibao.mapper.AgencyItemsMapper.BaseResultMap">
+        <result column="company_name" property="companyName" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="unit_price" property="unitPrice" jdbcType="VARCHAR"/>
+
+        <association property="agencyCompany" javaType="com.github.weibao.model.AgencyCompany">
+            <id column="company_Id" property="companyId" jdbcType="INTEGER"/>
+            <result column="provincename" property="province" jdbcType="CHAR"/>
+            <result column="cityname" property="city" jdbcType="CHAR"/>
+            <result column="countyname" property="county" jdbcType="CHAR"/>
+            <result column="company_name" property="companyName" jdbcType="CHAR"/>
+            <result column="company_type" property="companyType" jdbcType="CHAR"/>
+            <result column="company_scale" property="companyScale" jdbcType="INTEGER"/>
+            <result column="address" property="address" jdbcType="CHAR"/>
+            <result column="law_person" property="lawPerson" jdbcType="CHAR"/>
+            <result column="telephone" property="telephone" jdbcType="CHAR"/>
+            <result column="url" property="url" jdbcType="CHAR"/>
+            <result column="companyintro" property="intro" jdbcType="CHAR"/>
+            <result column="account_Id" property="accountId" jdbcType="INTEGER"/>
+            <result column="is_deleted" property="isDeleted" jdbcType="CHAR"/>
+
+        </association>
+
+        <collection property="staffsList" ofType="com.github.weibao.model.AgencyStaffs">
+            <id column="staff_Id" property="staffId" jdbcType="INTEGER"/>
+            <result column="name" property="name" jdbcType="VARCHAR"/>
+            <result column="gender" property="gender" jdbcType="VARCHAR"/>
+            <result column="post" property="post" jdbcType="VARCHAR"/>
+            <result column="qq" property="qq" jdbcType="VARCHAR"/>
+            <result column="phone" property="phone" jdbcType="INTEGER"/>
+            <result column="email" property="email" jdbcType="VARCHAR"/>
+            <result column="weichar" property="weichat" jdbcType="CHAR"/>
+            <result column="account_Id" property="accountId" jdbcType="INTEGER"/>
+            <result column="is_deleted" property="isDeleted" jdbcType="CHAR"/>
+            <result column="weichatCode_filename" property="weichatcodeFilename" jdbcType="CHAR"/>
+            <result column="head_filename" property="headFilename" jdbcType="CHAR"/>
+        </collection>
+    </resultMap>
+
+    <!--<sql id="Item_Column_List">-->
+    <!--i.item_Id,-->
+    <!--i.item_name,-->
+    <!--i.item_Id,-->
+    <!--i.cost,-->
+    <!--i.max_cost,-->
+    <!--i.min_cost,-->
+    <!--i.intro-->
+    <!--</sql>-->
+    <!--<sql id="Staff_Column_List">-->
+    <!--s.name,-->
+    <!--s.staff_Id,-->
+    <!--s.phone,-->
+    <!--s.qq,-->
+    <!--s.email,-->
+    <!--s.weichat-->
+    <!--</sql>-->
+    <!--<select id="selectStaff" resultMap="agencyItemsExtResultMap">-->
+    <!--SELECT<include refid="Item_Column_List"/>,-->
+    <!--<include refid="Staff_Column_List"/>-->
+    <!--FROM-->
+    <!--agency_items i,-->
+    <!--agency_staffs s,-->
+    <!--agency_items_has_staffs ihs-->
+    <!--WHERE-->
+    <!--i.item_id = ihs.item_id-->
+    <!--AND s.staff_id = ihs.staff_id-->
+    <!--AND i.item_id in-->
+    <!--<foreach collection="list" item="itemId" index="index" open="(" close=")" separator=",">#{itemId}</foreach>-->
+    <!--order by item_id,staff_Id-->
+    <!--</select>-->
+
+    <insert id="insertStaffsItemsRelevance" parameterType="ItemStaffLink">
+        INSERT INTO agency_items_has_staffs (item_Id,staff_Id) VALUES (#{itemId},#{staffId})
+    </insert>
+
+
+    <select id="selectAll" resultMap="agencyItemsExtResultMap">
+    select a.company_name as company_name,
+    b.item_name,
+    b.item_Id,
+    p.unit_price,
+    b.intro,
+    a.url,
+    q.value
+    from agency_items b
+    left join agency_company a ON a.company_Id = b.company_Id
+    left outer join province on a.province=province.code
+    left outer join city on a.city=city.code
+    left outer join county on  a.county=county.code
+    left join item_price p on b.item_Id = p.item_Id
+    left join dictionary q on q.code = p.unit
+    where a.province=#{0}
+    and (city.name like #{2} OR county.name like #{2})
+    and (a.company_name like  #{1} OR b.item_name like #{1} or b.intro like #{1})
+    and b.is_deleted='${@com.github.weibao.Contants@IS_NOT_DELETED}'
+    group by a.company_name,b.item_Id limit #{3},#{4};
+
+    </select>
+
+    <select id="selectPage" resultType="INTEGER">
+    select  count(b.item_Id ) as page
+    from agency_items b
+    left join agency_company a ON a.company_Id = b.company_Id
+    left join province on a.province=province.code
+    left join city on a.city=city.code
+    left join county on  a.county=county.code
+    where a.province=#{0}
+    and (city.name like #{2} OR county.name like #{2})
+    and (a.company_name like  #{1} OR b.item_name like #{1} or b.intro like #{1})
+    and b.is_deleted='${@com.github.weibao.Contants@IS_NOT_DELETED}';
+    </select>
+    <!--<select id="selectCollect" resultMap="BaseResultMap">-->
+    <!--select ci.items_id,ci.user_id,-->
+    <!--a.company_name as aa,b.item_name as bb,-->
+    <!--b.item_Id AS bid,c.staff_Id as cc,-->
+    <!--group_concat(d.name,":",d.phone ) as ff,-->
+    <!--telephone,address,cost,-->
+    <!--b.item_Id,company_scale,-->
+    <!--province.name as province,-->
+    <!--city.name as city,-->
+    <!--county.name as county-->
+    <!--from collect_items ci-->
+    <!--left join agency_items b  on ci.items_id=b.item_Id-->
+    <!--left join agency_company a ON a.company_Id = b.company_Id-->
+    <!--left join agency_items_has_staffs c on c.item_Id = b.item_Id-->
+    <!--left join agency_staffs d on d.staff_Id = c.staff_Id-->
+    <!--left join province on a.province=province.code-->
+    <!--left join city on a.city=city.code-->
+    <!--left join county on  a.county=county.code-->
+    <!--where user_id=#{0}-->
+    <!--group by aa,bb;-->
+    <!--</select>-->
+
+    <!--<select id="selectPage" resultType="INTEGER">-->
+    <!--select  count(b.item_Id ) as page-->
+    <!--from agency_items b-->
+    <!--left join agency_company a ON a.company_Id = b.company_Id-->
+    <!--left join province on a.province=province.code-->
+    <!--left join city on a.city=city.code-->
+    <!--left join county on  a.county=county.code-->
+    <!--where a.province=#{0}-->
+    <!--and (city.name like #{2} OR county.name like #{2})-->
+    <!--and (a.company_name like  #{1} OR b.item_name like #{1})-->
+
+    <!--&#45;&#45; select company_name,item_name,group_concat(dd,":",ee ) from agency_company a left join agency_items b ON a.company_Id = b.company_Id-->
+    <!--&#45;&#45;  left join agency_items_has_agency_staffs c on c.agency_items_item_Id = b.item_Id-->
+    <!--&#45;&#45;   left join agency_staffs d on d.staff_Id = c.agency_staffs_staff_Id;-->
+    <!--&#45;&#45;-->
+    <!--&#45;&#45;        select aa,bb,group_concat(dd,":",ee ) as ff,telephone,province,city,address,cost,item_Id,company_scale from-->
+    <!--&#45;&#45;       (select a.company_name as aa,b.item_name as bb,b.item_Id AS bid,c.agency_staffs_staff_Id as cc,d.name as dd,d.phone as ee-->
+    <!--&#45;&#45;       from agency_items b left join agency_company a-->
+    <!--&#45;&#45;       ON a.company_Id = b.company_Id-->
+    <!--&#45;&#45;       left join agency_items_has_agency_staffs c on c.agency_items_item_Id = b.item_Id-->
+    <!--&#45;&#45;       left join agency_staffs d on d.staff_Id = c.agency_staffs_staff_Id  ) newtable-->
+    <!--&#45;&#45;       group by aa,bid;-->
+    <!--</select>-->
+
+    <!--<insert id="insertItemStaffLink" parameterType="ItemStaffLink">-->
+    <!--INSERT INTO agency_items_has_staffs (item_Id,staff_Id) VALUES (#{itemId},#{staffId})-->
+    <!--</insert>-->
+    <select id="selectItemHasUnit" resultMap="agencyItemsExtResultMap">
+    select i.item_name,i.intro, p.unit_price, d.value,i.cost,i.item_Id,i.company_Id,i.is_deleted
+      from weibaopro.agency_items i
+      left join item_price p on i.item_Id = p.item_Id
+      left join dictionary d on d.code = p.unit
+      where i.company_Id = #{companyId} AND i.is_deleted='-1'
+    </select>
+
+    <select id="selectAllExt" resultMap="agencyItemsExtResultMap">
+    select
+          a.company_Id,
+          a.company_name,
+          province.name as provincename,
+          city.name as cityname,
+          county.name as countyname,
+          a.company_type,
+          a.company_scale,
+          a.address,
+          a.law_person,
+          a.telephone,
+          a.url,
+          a.intro as companyintro,
+          a.account_Id,
+          a.is_deleted,
+          b.item_Id,
+          b.item_name,
+          b.item_type,
+          p.unit_price,
+          b.intro,
+          b.is_deleted,
+          q.value
+        from agency_items b
+        left join agency_company a ON a.company_Id = b.company_Id
+        left join agency_items_has_staffs c on c.item_Id = b.item_Id
+        left join agency_staffs d on d.staff_Id = c.staff_Id
+	    left join province on a.province=province.code
+        left join city on a.city=city.code
+        left join county on  a.county=county.code
+        left join item_price p on b.item_Id = p.item_Id
+        left join dictionary q on q.code = p.unit
+        where b.item_Id=#{0};
+</select>
+
+<update id="RemoveItemBatch"  parameterType="java.util.List">
+    UPDATE agency_items SET is_deleted = '1' WHERE item_Id in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+
+        #{item.itemId}
+
+    </foreach>
+</update>
+</mapper>

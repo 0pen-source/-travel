@@ -1,0 +1,28 @@
+package com.github.weibao.service;
+
+import com.github.weibao.model.ext.AgencyItemsExt;
+import com.github.weibao.test.unit.BaseUnitTest;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @Create 16/1/27,下午4:04
+ * @Author dongzhukai
+ */
+public class ItemsServiceTest extends BaseUnitTest{
+
+    @Autowired
+    private ItemsService itemsService;
+
+    @Test
+    public void testqueryStaff() throws Throwable {
+        List<Integer> itemIdList = new ArrayList<Integer>();
+        itemIdList.add(200);
+        itemIdList.add(201);
+        List<AgencyItemsExt> list = itemsService.queryStaff(itemIdList);
+        System.out.println();
+    }
+}

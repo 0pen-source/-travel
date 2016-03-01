@@ -1,0 +1,275 @@
+package com.github.weibao.controller.biz;
+
+import com.github.weibao.controller.vo.UploadDemoVo;
+import com.github.weibao.exception.ServiceException;
+import com.github.weibao.service.UploadDemoService;
+import com.github.weibao.utils.FileUtils;
+<<<<<<< .mine
+=======
+import com.github.weibao.utils.PropertyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> .r6434
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.*;
+<<<<<<< .mine
+=======
+import java.util.Date;
+>>>>>>> .r6434
+import java.util.Iterator;
+
+/**
+ * @Create 16/2/16,上午8:38
+ * @Author dongzhukai
+ */
+@Controller
+@RequestMapping("/demo")
+public class UploadController {
+    private Logger logger = LoggerFactory.getLogger(UploadController.class);
+    static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+    static BASE64Decoder decoder = new sun.misc.BASE64Decoder();
+
+    public static void main(String[] args) {
+//        System.out.println(getImageBinary());
+        System.out.println("1");
+
+//        base64StringToImage(getImageBinary());
+    }
+
+    /**
+     * 将图片转化二进制
+     *
+     * @param path
+     * @return
+     */
+    static String getImageBinary(String path) {
+        File f = new File(path);
+        BufferedImage bi;
+        try {
+            bi = ImageIO.read(f);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bi, "jpg", baos);
+            byte[] bytes = baos.toByteArray();
+
+            return encoder.encodeBuffer(bytes).trim();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 将二进制转化为图片
+     *
+     * @param base64String 二进制参数
+     */
+    static void base64StringToImage(String base64String, String realPath, String filename) {
+        try {
+            byte[] bytes1 = decoder.decodeBuffer(base64String);
+
+            ByteArrayInputStream bais = new ByteArrayInputStream(bytes1);
+            BufferedImage bi1 = ImageIO.read(bais);
+            File w2 = new File(realPath + filename);//可以是jpg,png,gif格式
+//            System.out.println(path2);
+//            System.out.println("路径位置"+w2.getAbsolutePath());
+            ImageIO.write(bi1, "jpg", w2);//不管输出什么格式图片，此处不需改动
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @RequestMapping("toDemoUploadPage")
+    public String toUploadTestPage(Model model) {
+
+        return "demo_upload";
+    }
+
+    @RequestMapping("/upload")
+    public String addUser(@RequestParam("file") CommonsMultipartFile[] files, HttpServletRequest request) {
+
+        for (int i = 0; i < files.length; i++) {
+            System.out.println("fileName---------->" + files[i].getOriginalFilename());
+
+            if (!files[i].isEmpty()) {
+                int pre = (int) System.currentTimeMillis();
+                try {
+                    //拿到输出流，同时重命名上传的文件
+                    //FileOutputStream os = new FileOutputStream("/Users/dongzhukai/GitHub/fileserver/" + new Date().getTime() + files[i].getOriginalFilename());
+                    FileOutputStream os = new FileOutputStream("/Users/dongzhukai/GitHub/fileserver/" + new Date().getTime() + files[i].getOriginalFilename().hashCode());
+                    //拿到上传文件的输入流
+                    FileInputStream in = (FileInputStream) files[i].getInputStream();
+
+                    //以写字节的方式写文件
+                    int b = 0;
+                    while ((b = in.read()) != -1) {
+                        os.write(b);
+                    }
+                    os.flush();
+                    os.close();
+                    in.close();
+                    int finaltime = (int) System.currentTimeMillis();
+                    System.out.println(finaltime - pre);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("上传出错");
+                }
+            }
+        }
+        return "/success";
+    }
+
+    @RequestMapping("/upload2")
+    public String upload2(HttpServletRequest request, HttpServletResponse response) throws IllegalStateException, IOException {
+        //// TODO: 16/2/18 文件上传名字重复的问题
+        //创建一个通用的多部分解析器
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        //判断 request 是否有文件上传,即多部分请求
+        if (multipartResolver.isMultipart(request)) {
+            //转换成多部分request
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+            //取得request中的所有文件名
+            Iterator<String> iter = multiRequest.getFileNames();
+            while (iter.hasNext()) {
+                //记录上传过程起始时的时间，用来计算上传时间
+                //int pre = (int) System.currentTimeMillis();
+                //取得上传文件
+                MultipartFile file = multiRequest.getFile(iter.next());
+                if (file != null) {
+                    //取得当前上传文件的文件名称
+                    String myFileName = file.getOriginalFilename();
+                    InputStream input = file.getInputStream();
+                    //如果名称不为“”,说明该文件存在，否则说明该文件不存在
+                    if (myFileName.trim() != "") {
+                        //System.out.println(myFileName);
+                        //重命名上传后的文件名
+                        String fileName = "demoUpload" + file.getOriginalFilename();
+                        //定义上传路径
+                        String path = PropertyUtil.getInstance().getValue("");
+                        File localFile = new File(path);
+                        file.transferTo(localFile);
+                        //打印该图片的二进制 // TODO: 16/2/18 保存到数据库,还需要文件名和文件路径字段
+                        System.out.println(getImageBinary(path));
+                        //获得项目路径
+                        String path2 = request.getServletContext().getRealPath("/");
+                        String objectPath[] = path2.split("build/classes");
+                        String path3 = objectPath[0];
+                        String realPath = path3 + "src/main/webapp/WEB-INF/app/";
+                        base64StringToImage(getImageBinary(path), realPath, fileName);
+
+                    }
+                }
+                //记录上传该文件后的时间
+                //int finaltime = (int) System.currentTimeMillis();
+                //System.out.println(finaltime - pre);
+            }
+
+        }
+
+        return "/success";
+    }
+
+    @RequestMapping("/upload3")
+    public static String upload3(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        upload4(request, response);
+        return null;
+    }
+
+    @RequestMapping("/upload4")
+    public static String upload4(HttpServletRequest request, HttpServletResponse response) throws IllegalStateException, IOException {
+        //创建一个通用的多部分解析器
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        //判断 request 是否有文件上传,即多部分请求
+        if (multipartResolver.isMultipart(request)) {
+            //转换成多部分request
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+            //取得request中的所有文件名
+            Iterator<String> iter = multiRequest.getFileNames();
+            while (iter.hasNext()) {
+                //记录上传过程起始时的时间，用来计算上传时间
+                //int pre = (int) System.currentTimeMillis();
+                //取得上传文件
+                MultipartFile file = multiRequest.getFile(iter.next());
+                if (file != null) {
+                    //取得当前上传文件的文件名称
+//                    String myFileName = file.getOriginalFilename();
+                    String myFileName = FileUtils.getNowDate();
+                    //InputStream input = file.getInputStream();
+                    //如果名称不为“”,说明该文件存在，否则说明该文件不存在
+                    if (myFileName.trim() != "") {
+                        //System.out.println(myFileName);
+                        //重命名上传后的文件名
+                        String fileName = FileUtils.getNowDate() + ".jpg";// TODO: 16/2/19 后期判定后缀不要定死
+                        //----定义上传路径----
+                        //读取属性文件中的存放图片的路径
+                        String fileServerPath = PropertyUtil.getInstance().getValue("file_server_path");
+                        File localFile = new File(fileServerPath + File.separator + fileName);
+                        file.transferTo(localFile);
+                        return fileName;
+                    }
+                }
+                //记录上传该文件后的时间
+                //int finaltime = (int) System.currentTimeMillis();
+                //System.out.println(finaltime - pre);
+            }
+
+        }
+        return null;
+    }
+
+
+    @Autowired
+    private UploadDemoService uploadDemoService;
+
+    /**
+     *      * 第一种Spring Mvc上传文件，提交form表单文件到一个frame，刷新该frame，页面打印出返回的结果
+     *      * @param request
+     *      * @param demo
+     *      * @return
+     *      
+     */
+
+    @RequestMapping(value = "/upload5", method = RequestMethod.POST)
+    @ResponseBody
+    public Object firstUpload(HttpServletRequest request, UploadDemoVo demo) {
+        logger.info("firstUpload info:" + demo.toString());
+        boolean flag = false;
+        //errorMessage：上传失败，则是错误信息；上传成功，则提示成功以及显示文件上传后的地址
+        String errorMessage = "";
+        try {
+            flag = uploadDemoService.uploadForm(demo);
+            //errorMessage += "文件地址：" + PropertyUtil.getInstance().getValue("image_server_path") + demo.getImgFile().getOriginalFilename();
+            errorMessage += "文件地址：" + PropertyUtil.getInstance().getValue("image_server_path") + demo.getImgFile().getOriginalFilename().hashCode();
+        } catch (ServiceException serviceE) {
+            logger.error("firstUpload failed!", serviceE);
+            errorMessage = serviceE.getMessage();
+        } catch (Exception e) {
+            logger.error("firstUpload failed!", e);
+            errorMessage = "新增文件失败!";
+        }
+        if (flag) {
+            //上传成功，返回到前台，调用uploadSucced()这个方法
+            return "<script>window.parent.uploadSucced('" + errorMessage + "');</script>";
+        }
+        //上传失败，返回到前台，调用uploadFailed()这个方法
+        return "<script>window.parent.uploadFailed('" + errorMessage + "');</script>";
+    }
+}

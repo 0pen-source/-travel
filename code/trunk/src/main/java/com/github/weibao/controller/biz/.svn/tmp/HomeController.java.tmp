@@ -1,0 +1,142 @@
+package com.github.weibao.controller.biz;
+
+import com.github.weibao.Contants;
+import com.github.weibao.controller.BaseController;
+import com.github.weibao.model.BizMember;
+import com.github.weibao.model.Province;
+import com.github.weibao.service.AreaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+/**
+ * Created by chenkaihua on 15-12-15.
+ */
+@Controller
+@RequestMapping("")
+public class HomeController extends BaseController{
+    private Logger logger = LoggerFactory.getLogger(HomeController.class);
+    @Autowired
+    AreaService areaService;
+
+    //**********************
+
+    @RequestMapping("")
+    public String whome(Model model) {
+        List<Province> provinceList = areaService.getAllProvince();
+        model.addAttribute("provinceList", provinceList);
+
+        return "w_home";
+    }
+
+    @RequestMapping("w_search")
+    public String wsearch(Model model) {
+        List<Province> provinceList = areaService.getAllProvince();
+        model.addAttribute("provinceList", provinceList);
+
+        return "w_search";
+    }
+
+    @RequestMapping("w_toLogin")
+    public String wtologin(Model model) {
+
+        return "w_login";
+    }
+
+    //******************* 公司
+    //@RequestMapping("w_my_empty")
+    //public String wMyEmpty(Model model) {
+    //
+    //    return "w_mycompany_empty";
+    //}
+
+<<<<<<< .mine
+=======
+    @RequestMapping("w_toAgencyCompany")
+    public String toAgencyCompany(Model model, HttpServletRequest request) {
+        BizMember account = doLoginCheck();
+        if(null == account) {
+            request.getSession().setAttribute(Contants.CURRENT_USER_REFERER,"w_toAgencyCompany");
+            return "w_login";
+        }
+>>>>>>> .r6173
+
+
+    @RequestMapping("w_toAddCompany")
+    public String toAddCompany(Model model) {
+
+        return "w_addCompany";
+    }
+
+
+
+    //@RequestMapping("w_showCompany_full")
+    //public String wshowCompanyFull(Model model) {
+    //
+    //    return "w_showCompany_full";
+    //}
+
+    @RequestMapping("w_editCompany")
+    public String weditCompany(Model model) {
+
+        return "w_editCompany";
+    }
+
+    @RequestMapping("w_deleteCompany")
+    public String wdeleteCompany(Model model) {
+
+        return "w_deleteCompany";
+    }
+
+    //******************服务
+
+    @RequestMapping("w_addItem")
+    public String waddItem(Model model) {
+
+        return "w_addItem";
+    }
+
+    @RequestMapping("w_showItem")
+    public String wshowItem(Model model) {
+
+        return "w_showItem";
+    }
+
+    @RequestMapping("w_editItem")
+    public String weditItem(Model model) {
+
+        return "w_editItem";
+    }
+
+    //********************联系人
+
+    @RequestMapping("w_addStaff")
+    public String waddStaff(Model model) {
+
+        return "w_addStaff";
+    }
+
+    @RequestMapping("w_showStaff")
+    public String wshowStaff(Model model) {
+
+        return "w_showStaff";
+    }
+
+    @RequestMapping("w_editStaff")
+    public String weditStaff(Model model) {
+
+        return "w_editStaff";
+    }
+
+    @RequestMapping("w_deleteStaff")
+    public String wdeleteStaff(Model model) {
+
+        return "w_deleteStaff";
+    }
+}

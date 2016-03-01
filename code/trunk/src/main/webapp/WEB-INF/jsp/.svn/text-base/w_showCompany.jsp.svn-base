@@ -1,0 +1,134 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午8:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!doctype html>
+<html class="no-js">
+<jsp:include page="common/w_head.jsp"/>
+<body>
+<jsp:include page="common/w_header_b.jsp"/>
+<!-- sidebar start -->
+<!-- sidebar end -->
+<br>
+<!-- content start -->
+<div class="admin-content">
+
+  <div class="am-u-sm-9">
+    <div class="wb-panel-fc">
+      <div class="am-g">
+        <div class="am-text-center">
+          <label>${agencyCompany.companyName}</label>
+          <hr>
+        </div>
+        <div class="am-u-sm-10 am-u-sm-centered">
+          <div class="gslxcon">
+            <c:if test="${!empty agencyCompany}">
+
+              <ul>
+                <li class="gslxl">公司名称：</li>
+                <li class="gslxr">${agencyCompany.companyName}&nbsp;</li>
+              </ul>
+              <ul>
+                <li class="gslxl">公司地址：</li>
+                <li class="gslxr">${agencyCompany.address}&nbsp;</li>
+              </ul>
+              <ul>
+                <li class="gslxl">公司网址：</li>
+                <li class="gslxr">${agencyCompany.url}&nbsp;</li>
+              </ul>
+              <ul>
+                <li class="gslxl">联系电话：</li>
+                <li class="gslxr">${agencyCompany.telephone}&nbsp;</li>
+              </ul>
+              <ul>
+                <li class="gslxl">公司规模：</li>
+                <li class="gslxr">${agencyCompany.companyScale}&nbsp;</li>
+              </ul>
+              <%--<ul>--%>
+              <%--<li class="gslxl">手机：</li>--%>
+              <%--<li class="gslxr">13554622333&nbsp;</li>--%>
+              <%--</ul>--%>
+              <ul>
+                <li class="gslxl">法人代表：</li>
+                <li class="gslxr">${agencyCompany.lawPerson}&nbsp;</li>
+              </ul>
+              <ul>
+                <li class="gslxl">简介：</li>
+                <li class="gslxr"><br><br><br><br>${agencyCompany.intro}&nbsp;</li>
+              </ul>
+            </c:if>
+          </div>
+        </div>
+
+        <hr>
+        <div class="am-g">
+          <div class="am-u-md-12">
+            <div class="am-btn-toolbar am-fr">
+              <button type="button" class="am-btn am-btn-default" onclick="showItem();"><span class=""></span> 查看服务</button>
+              <button type="button" class="am-btn am-btn-default" onclick="addItem();"><span class="am-icon-plus"></span> 新增服务</button>
+              <button type="button" class="am-btn am-btn-default"><span class="am-icon-edit"></span>
+                <a href="${ctx}/company/w_editCompany?companyId=${agencyCompany.companyId}"> 修改</a>
+              </button>
+              <button type="button" class="am-btn am-btn-default" onclick="a();"><span class="am-icon-trash-o"></span> 删除</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%----%>
+      <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+        <div class="am-modal-dialog">
+          <div class="am-modal-hd">删除该员工</div>
+          <div class="am-modal-bd">
+            亲，确定要删除该员工吗？
+          </div>
+          <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+          </div>
+        </div>
+      </div>
+      <%----%>
+
+    </div>
+  </div>
+
+  <div class="am-u-sm-3">
+    <div class="wb-panel-fr">
+      <h5>客户服务</h5>
+      <p>客服邮箱：1204143963@qq.com</p>
+      <p>咨询电话：4000-110-543</p>
+      <p> QQ群：292577932</p>
+    </div>
+  </div>
+
+</div>
+<!-- content end -->
+<br>
+
+<!--在这里编写你的代码-->
+<jsp:include page="common/w_footer.jsp"/>
+<script>
+  $(function() {
+
+  });
+  function a(itemId,staffId){
+    $('#my-confirm').modal({
+      relatedTarget: this,
+      onConfirm: function (options) {
+        location.href =ctx+ "/staff/delete?itemId="+itemId+"&staffId="+staffId ;//location.href实现客户端页面的跳转
+
+      },
+      // closeOnConfirm: false,
+      onCancel: function () {
+
+      }
+    });
+  }
+</script>
+</body>

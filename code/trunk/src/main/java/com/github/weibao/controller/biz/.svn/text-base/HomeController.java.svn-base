@@ -1,0 +1,244 @@
+package com.github.weibao.controller.biz;
+
+import com.github.weibao.Contants;
+import com.github.weibao.controller.BaseController;
+import com.github.weibao.controller.vo.StaffVo;
+import com.github.weibao.model.*;
+import com.github.weibao.model.ext.AgencyItemsExt;
+import com.github.weibao.service.AgencyItemsExtService;
+import com.github.weibao.service.AreaService;
+import com.github.weibao.utils.Json;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+
+import org.springframework.util.StringUtils;
+
+
+import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+/**
+ * Created by chenkaihua on 15-12-15.
+ */
+@Controller
+@RequestMapping("")
+public class HomeController extends BaseController{
+    private Logger logger = LoggerFactory.getLogger(HomeController.class);
+    @Autowired
+    AreaService areaService;
+    @Autowired
+    AgencyItemsExtService agencyItemsExtService;
+
+    //**********************
+
+    @RequestMapping("")
+    public String whome(Model model) {
+        List<Province> provinceList = areaService.getAllProvince();
+        model.addAttribute("provinceList", provinceList);
+
+        return "w_home";
+    }
+
+    @RequestMapping("search")
+    public String wsearch(@RequestParam("provincecode") String provincecode,
+                          @RequestParam("nowpage") Integer mypage,
+                          @RequestParam("city") String city,
+                          @RequestParam("searchKey") String searchKey,
+                          Model model) {
+        List<Province> provinceList = areaService.getAllProvince();
+
+        //通过code查询点击的省份名称
+        Province province = areaService.getProvinceByCode(provincecode);
+
+        List citylist = areaService.getCity(provincecode);
+        model.addAttribute("citylist", citylist);
+
+        //获取每页显示数据个数
+        int dbnumber = Contants.DBNUMBER;
+        //当前页码
+        if(StringUtils.isEmpty(mypage)){
+            mypage = 1;
+        }
+        int nowpage = mypage;
+        //第一条数据的索引
+        int firstdb = (nowpage - 1) * 10;
+        //模糊查询用到
+        String infoext = "%" + searchKey.replace(" ","") + "%";
+        String cityext = "%" + city + "%";
+        //获取页码总数
+        int page = agencyItemsExtService.getPageNumber(provincecode, infoext, cityext, dbnumber);
+        //获取所有信息
+        logger.debug("参数:provincecode" + provincecode + ",infoext:" + infoext + ",cityext:" + cityext + ",firstdb:" + firstdb + ",dbnumber:" + dbnumber);
+
+        List<AgencyItemsExt> selectlist = agencyItemsExtService.selectAll(provincecode, infoext, cityext, firstdb, dbnumber);
+        model.addAttribute("province", province);
+        model.addAttribute("page", page);
+        model.addAttribute("nowpage", nowpage);
+        model.addAttribute("provincecode", provincecode);
+        model.addAttribute("info", searchKey);
+        model.addAttribute("city", city);
+        model.addAttribute("selectlist", selectlist);
+
+        model.addAttribute("provinceList", provinceList);
+//        System.out.println(provincecode);
+//        System.out.println(citylist.size());
+//        System.out.println(infoext);
+//        System.out.println(province.getName());
+//        System.out.println(page);
+//        System.out.println(selectlist.size());
+//        System.out.println(cityext);
+//        System.out.println(firstdb);
+//        System.out.println(dbnumber);
+        return "w_search";
+    }
+
+    @RequestMapping(value = "/getCityByProvinceIdJson/{id}")
+    @ResponseBody
+    public Json getCityByProvinceIdJson(@PathVariable("id") String id) {
+        logger.info("------this is getCityByProvinceId INFO-----");
+        //获取市区
+        List cityList = null;
+        String cityCode = null;
+        if (id.equals("110000")) {//过滤直辖市
+            cityCode = "110100";
+            cityList = areaService.getCountyByCityCode(cityCode);
+        }else if (id.equals("120000")) {
+            cityCode = "120100";
+            cityList = areaService.getCountyByCityCode(cityCode);
+        }else if (id.equals("310000")) {
+            cityCode = "310100";
+            cityList = areaService.getCountyByCityCode(cityCode);
+        }else if (id.equals("500000")) {
+            cityCode = "500100";
+            cityList = areaService.getCountyByCityCode(cityCode);
+        }
+        else {
+            cityList = areaService.getCityByProvinceCode(id);
+        }
+        if (cityList != null) {
+            return new Json(true, "success", cityList);
+        } else {
+            return new Json(false, "fail", null);
+        }
+    }
+
+    @RequestMapping("w_search_detail")
+    public String wsearchDetail(@RequestParam("itemId") String  itemId, Model model) {
+        List<AgencyItemsExt> selectAllExtList=agencyItemsExtService.selectAllExt(itemId);
+        List<StaffVo>  staffsList=agencyItemsExtService.selectAllStaffs(itemId);
+        model.addAttribute("selectAllExtList",selectAllExtList);
+        model.addAttribute("staffsList",staffsList);
+//        System.out.println(111);
+//        System.out.println(itemId);
+//        for (AgencyItemsExt list:selectAllExtList){
+//            System.out.println(list.getAgencyCompany().getCompanyName());
+//            System.out.println(list.getItemName());
+//            System.out.println(list.getStaffsList().size());
+//
+//        }
+//        System.out.println(staffsList.size());
+//        System.out.println(22222);
+        return "w_search_detail";
+    }
+
+    @RequestMapping("w_toLogin")
+    public String wtologin(String msg,Model model) {
+
+        if(!StringUtils.isEmpty(msg)){
+            if(msg.equals("1")){
+                model.addAttribute("error","亲,用户名和密码不匹配请重新填写");
+            }
+        }
+
+        return "w_login";
+    }
+
+    //******************* 公司
+    //@RequestMapping("w_my_empty")
+    //public String wMyEmpty(Model model) {
+    //
+    //    return "w_mycompany_empty";
+    //}
+
+
+
+    @RequestMapping("w_toAddCompany")
+    public ModelAndView toAddCompany(Model model, HttpServletRequest request,String companyErroStatus) {
+        BizMember account = doLoginCheck();
+        if(null == account) {
+            request.getSession().setAttribute(Contants.CURRENT_USER_REFERER,"w_toAddCompany");
+
+            return new ModelAndView("w_login");
+        }
+
+
+
+        if ("2".equals(companyErroStatus)) {
+            ModelAndView mv = new ModelAndView();
+            mv.setViewName("w_addCompany");
+            String companyErro = "对不起,该账户下已经由该公司,请核对公司名称是否重复";
+            mv.addObject("companyErro",companyErro);
+            return mv;
+        }
+        return new ModelAndView("w_addCompany");
+    }
+
+
+
+    //******************服务
+
+    @RequestMapping("w_toAddItem")
+    public ModelAndView waddItem(AgencyCompany agencyCompany,String companyName,String insertItemErro) {
+        ModelAndView mv =  new ModelAndView();
+        mv.setViewName("w_addItem");
+        mv.addObject("companyId",agencyCompany.getCompanyId());
+        mv.addObject("companyName",companyName);
+        mv.addObject("insertItemErro",insertItemErro);
+
+        return mv;
+    }
+
+
+
+
+    //********************联系人
+
+     @RequestMapping("w_toAddStaff")
+    public ModelAndView waddStaff(AgencyItems agencyItems,String itemName,String companyName) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("w_addStaff");
+        mv.addObject(agencyItems);
+         mv.addObject("itemName",itemName);
+         mv.addObject("companyName",companyName);
+        return mv;
+    }
+
+    @RequestMapping("w_showStaff")
+    public String wshowStaff(Model model) {
+
+        return "w_showStaff";
+    }
+
+    @RequestMapping("w_editStaff")
+    public String weditStaff(Model model) {
+
+        return "w_editStaff";
+    }
+
+    @RequestMapping("w_deleteStaff")
+    public String wdeleteStaff(Model model) {
+
+        return "w_deleteStaff";
+    }
+}

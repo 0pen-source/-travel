@@ -1,0 +1,203 @@
+package com.github.weibao.model;
+
+import java.util.Date;
+import javax.persistence.*;
+
+@Table(name = "biz_member")
+public class BizMember {
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "Name")
+    private String name;
+
+    @Column(name = "Telphone")
+    private String telphone;
+
+    @Column(name = "Password")
+    private String password;
+
+    @Column(name = "CreateTime")
+    private Date createtime;
+
+    @Column(name = "Email")
+    private String email;
+
+    @Column(name = "CardNo")
+    private String cardno;
+
+    @Column(name = "UserID")
+    private Integer userid;
+
+    /**
+     * 邀请码
+     */
+    @Column(name = "InvitationCode")
+    private Integer invitationcode;
+
+    @Column(name = "Enable")
+    private Integer enable;
+
+    @Column(name = "lastStamp")
+    private Date laststamp;
+
+    /**
+     * @return ID
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return Name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @return Telphone
+     */
+    public String getTelphone() {
+        return telphone;
+    }
+
+    /**
+     * @param telphone
+     */
+    public void setTelphone(String telphone) {
+        this.telphone = telphone;
+    }
+
+    /**
+     * @return Password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return CreateTime
+     */
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    /**
+     * @param createtime
+     */
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    /**
+     * @return Email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return CardNo
+     */
+    public String getCardno() {
+        return cardno;
+    }
+
+    /**
+     * @param cardno
+     */
+    public void setCardno(String cardno) {
+        this.cardno = cardno;
+    }
+
+    /**
+     * @return UserID
+     */
+    public Integer getUserid() {
+        return userid;
+    }
+
+    /**
+     * @param userid
+     */
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    /**
+     * 获取邀请码
+     *
+     * @return InvitationCode - 邀请码
+     */
+    public Integer getInvitationcode() {
+        return invitationcode;
+    }
+
+    /**
+     * 设置邀请码
+     *
+     * @param invitationcode 邀请码
+     */
+    public void setInvitationcode(Integer invitationcode) {
+        this.invitationcode = invitationcode;
+    }
+
+    /**
+     * @return Enable
+     */
+    public Integer getEnable() {
+        return enable;
+    }
+
+    /**
+     * @param enable
+     */
+    public void setEnable(Integer enable) {
+        this.enable = enable;
+    }
+
+    /**
+     * @return lastStamp
+     */
+    public Date getLaststamp() {
+        return laststamp;
+    }
+
+    /**
+     * @param laststamp
+     */
+    public void setLaststamp(Date laststamp) {
+        this.laststamp = laststamp;
+    }
+}

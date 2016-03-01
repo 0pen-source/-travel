@@ -1,0 +1,166 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 上午8:58
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!doctype html>
+<html class="no-js">
+<jsp:include page="common/w_head.jsp"/>
+<body class="am-with-topbar-fixed-top">
+<jsp:include page="common/w_header.jsp"/>
+<div class="get" style="height:100%">
+  <div class="am-g am-container">
+    <div class="am-u-md-12 am-g-collapse">
+      <div class="search">
+        <form class="am-form" action="${ctx}/search" method="post">
+          <input type="hidden" name="nowpage">
+          <input type="hidden" name="city">
+          <div class="am-input-group">
+
+            <span class="am-input-group-btn am-g" style="width: 90px;">
+              <select id="doc-select-1" name="provincecode">
+                <%--<option value="">选择省</option>--%>
+                <c:if test="${!empty provinceList}">
+                  <c:forEach items="${provinceList}" var="province">
+                    <option value="${province.code}">${province.name}</option>
+                  </c:forEach>
+                </c:if>
+              </select>
+            </span>
+            <input type="text" class="am-form-field" placeholder="请输入查找关键字,例如:工商注册、代理记账、财税咨询" name="searchKey" value="">
+            <span class="am-input-group-btn">
+              <input class="am-btn am-btn-primary" style="width: 100px;" type="submit" value="搜索">搜索</input>
+            </span>
+          </div>
+        </form>
+      </div>
+      <%--<p>--%>
+      <%--期待你的参与，共同打造一个真实、高效的代理人社区.--%>
+      <%--</p>--%>
+
+
+      <%--<p>--%>
+      <%--<a href="${ctx}/w_toAddCompany" class="am-btn am-btn-sm get-btn">代理公司入驻</a>--%>
+      <%--</p>--%>
+    </div>
+  </div>
+</div>
+<jsp:include page="common/w_footer.jsp"/>
+<%--<div class="detail">--%>
+<%--<div class="am-g am-container">--%>
+<%--<div class="am-u-lg-12">--%>
+<%--<h2 class="detail-h2">微宝的使命—把企业连接起来,把企业和个人连接起来!</h2>--%>
+
+<%--<div class="am-g">--%>
+<%--<div class="am-u-lg-3 am-u-md-6 am-u-sm-12 detail-mb">--%>
+
+<%--<h3 class="detail-h3">--%>
+<%--<i class="am-icon-mobile am-icon-sm"></i>--%>
+<%--客户--%>
+<%--</h3>--%>
+
+<%--<p class="detail-p">--%>
+<%--服务于每年300万家新生公司、1000万家小微企业，10万家代理公司、100万个代理人员--%>
+<%--</p>--%>
+<%--</div>--%>
+<%--<div class="am-u-lg-3 am-u-md-6 am-u-sm-12 detail-mb">--%>
+<%--<h3 class="detail-h3">--%>
+<%--<i class="am-icon-cogs am-icon-sm"></i>--%>
+<%--信息--%>
+<%--</h3>--%>
+
+<%--<p class="detail-p">--%>
+<%--中小企业诞生、成长中需要的工商注册、代理记账、财税咨询、融资理财、证照、域名、专利、商标、审计、法律等各类信息查找、发布--%>
+<%--</p>--%>
+<%--</div>--%>
+<%--<div class="am-u-lg-3 am-u-md-6 am-u-sm-12 detail-mb">--%>
+<%--<h3 class="detail-h3">--%>
+<%--<i class="am-icon-check-square-o am-icon-sm"></i>--%>
+<%--交易--%>
+<%--</h3>--%>
+
+<%--<p class="detail-p">--%>
+<%--公司、商标、专利、域名、上市、融资、理财等资产服务交易--%>
+<%--</p>--%>
+<%--</div>--%>
+<%--<div class="am-u-lg-3 am-u-md-6 am-u-sm-12 detail-mb">--%>
+<%--<h3 class="detail-h3">--%>
+<%--<i class="am-icon-send-o am-icon-sm"></i>--%>
+<%--金融--%>
+<%--</h3>--%>
+
+<%--<p class="detail-p">--%>
+<%--企业之间、企业与个人、个人与个人的财务、金融信誉，融资理财--%>
+<%--</p>--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--<div class="hope">--%>
+<%--<div class="am-g am-container">--%>
+<%--<div class="am-u-lg-4 am-u-md-6 am-u-sm-12 hope-img">--%>
+<%--<img src="${ctx}/i/examples/landing.png" alt="" data-am-scrollspy="{animation:' slide-left', repeat: false}" class="am-scrollspy-init am-scrollspy-inview am-animation-slide-left">--%>
+<%--<hr class="am-article-divider am-show-sm-only hope-hr">--%>
+<%--</div>--%>
+<%--<div class="am-u-lg-8 am-u-md-6 am-u-sm-12">--%>
+<%--<h2 class="hope-title">10万家代理、100个代理人员、1000万个老板信息发布、服务交易--%>
+<%--</h2>--%>
+
+<%--<p>--%>
+<%--在信息爆炸时代，如何避免持续性信息过剩，使自己变得专注而不是被纷繁的信息所累？参与到微宝创业服务交易平台,提高自我交易效率。--%>
+<%--</p>--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--<div class="about">--%>
+<%--<div class="am-g">--%>
+<%--<div class="am-u-lg-12">--%>
+<%--<ul class="am-avg-sm-1 am-avg-md-3 am-margin am-padding am-text-center about-content-list ">--%>
+<%--<li><a href="#" class="am-text-success"><span class="am-icon-btn am-icon-file-text"></span><br>发布公司<br></a></li>--%>
+<%--<li><a href="#" class="am-text-warning"><span class="am-icon-btn am-icon-briefcase"></span><br>发布服务<br></a></li>--%>
+<%--<li><a href="#" class="am-text-danger"><span class="am-icon-btn am-icon-recycle"></span><br>发布联系人<br></a></li>--%>
+<%--&lt;%&ndash;<li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-user-md"></span><br>在线用户<br>3000</a></li>&ndash;%&gt;--%>
+<%--</ul>--%>
+<%--&lt;%&ndash;<h2 class="about-title about-color">微宝 崇尚开放、自由，非常欢迎大家的参与</h2>&ndash;%&gt;--%>
+
+<%--&lt;%&ndash;<div class="am-g">&ndash;%&gt;--%>
+<%--&lt;%&ndash;<div class="am-u-lg-6 am-u-md-4 am-u-sm-12">&ndash;%&gt;--%>
+<%--&lt;%&ndash;<form class="am-form">&ndash;%&gt;--%>
+<%--&lt;%&ndash;<label for="name" class="about-color">你的姓名</label>&ndash;%&gt;--%>
+<%--&lt;%&ndash;<input id="name" type="text">&ndash;%&gt;--%>
+<%--&lt;%&ndash;<br>&ndash;%&gt;--%>
+<%--&lt;%&ndash;<label for="email" class="about-color">你的邮箱</label>&ndash;%&gt;--%>
+<%--&lt;%&ndash;<input id="email" type="email">&ndash;%&gt;--%>
+<%--&lt;%&ndash;<br>&ndash;%&gt;--%>
+<%--&lt;%&ndash;<label for="message" class="about-color">你的留言</label>&ndash;%&gt;--%>
+<%--&lt;%&ndash;<textarea id="message"></textarea>&ndash;%&gt;--%>
+<%--&lt;%&ndash;<br>&ndash;%&gt;--%>
+<%--&lt;%&ndash;<button type="submit" class="am-btn am-btn-primary am-btn-sm"><i class="am-icon-check"></i> 提 交</button>&ndash;%&gt;--%>
+<%--&lt;%&ndash;</form>&ndash;%&gt;--%>
+<%--&lt;%&ndash;<hr class="am-article-divider am-show-sm-only">&ndash;%&gt;--%>
+<%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+
+<%--&lt;%&ndash;<div class="am-u-lg-6 am-u-md-8 am-u-sm-12">&ndash;%&gt;--%>
+<%--&lt;%&ndash;<h4 class="about-color">关于我们</h4>&ndash;%&gt;--%>
+
+<%--&lt;%&ndash;<p>&ndash;%&gt;--%>
+<%--&lt;%&ndash;北京微宝科技有限公司的创始人是王先生，在微宝公司成立之前有5家公司，出差期间遇到最大的困惑是不能实时掌握企业的财务情况。梦想能像亚洲首富孙正义（阿里巴巴公司大股东）的软银集团那样，财务管理做到日清月结。随时随地掌握企业的收入、成本、利润、现金。同时，公司的员工能够随时随地借款、报销，查询自己的工资条。王先生在市面找了几十款财务软件，都不能做到移动办公。随即组织了财务专家、企业会计、技术专家，研发出了移动办公的财务软件。王先生为了把自己的研发成果免费分享给所有的企业老板。2014年10月，王先生创立了北京微宝科技有限公司。致力于向中国1000万家企业提供终身免费的移动财务软件、移动办公软件、移动金融软件。</p>&ndash;%&gt;--%>
+<%--&lt;%&ndash;&lt;%&ndash;<h4 class="about-color">团队介绍</h4>&ndash;%&gt;&ndash;%&gt;--%>
+
+<%--&lt;%&ndash;&lt;%&ndash;<p>AllMobilize Inc 获得了微软创投孵化器的支持，其领先科技已得到全球多家企业及机构的认可与信赖，客户包括全球500强企业、美国政府、国内政府机关、国内外上市公司、以及互联网标准化组织W3C。</p>&ndash;%&gt;&ndash;%&gt;--%>
+<%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+<%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--</div>--%>
+<!--在这里编写你的代码-->
+
+
+</body>
+</html>

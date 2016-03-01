@@ -1,0 +1,57 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: dongzhukai
+  Date: 16/2/2
+  Time: 下午3:18
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+  <div class="am-offcanvas-bar admin-offcanvas-bar">
+    <ul class="am-list admin-sidebar-list">
+      <li>
+        <a href="#"><span class=""></span>公司管理</a>
+        <ul class="am-list admin-sidebar-sub" id="1">
+          <li>
+            <a href="${ctx}/company/w_toAgencyCompany" class="am-cf"><span class=""></span> 公司列表<%--<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span>--%></a>
+          </li>
+          <li>
+            <a href="${ctx}/w_toAddCompany" class="am-cf"><span class=""></span> 新增公司<%--<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span>--%></a>
+          </li>
+          <%--<c:if test="${!empty agencyCompanyList}">--%>
+            <%--<c:forEach items="${agencyCompanyList}" var="company">--%>
+              <%--<li>--%>
+                <%--<a href="${ctx}/company/w_showCompany?companyId=${company.companyId}" class="am-cf am-active"><span class=""></span> ${company.companyName}&lt;%&ndash;<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span>&ndash;%&gt;--%>
+                <%--</a>--%>
+              <%--</li>--%>
+            <%--</c:forEach>--%>
+          <%--</c:if>--%>
+        </ul>
+        <%--<ul class="am-list admin-sidebar-sub" id="2">--%>
+        <%--<c:if test="${!empty agencyCompanyList}">--%>
+        <%--<c:forEach items="${agencyCompanyList}" var="company">--%>
+        <%--<li>--%>
+        <%--<a href="${ctx}/w_showCompany_full" class="am-cf "><span class=""></span> ${company.companyName}&lt;%&ndash;<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span>&ndash;%&gt;</a>--%>
+        <%--</li>--%>
+        <%--</c:forEach>--%>
+        <%--</c:if>--%>
+
+        <%--</ul>--%>
+      </li>
+      <%--<li>--%>
+        <%--<a href="#"><span class=""></span>订单管理</a>--%>
+        <%--<ul class="am-list admin-sidebar-sub" id="2">--%>
+
+          <%--<li>--%>
+            <%--<a href="#" class="am-cf"><span class=""></span> 订单列表&lt;%&ndash;<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span>&ndash;%&gt;</a>--%>
+          <%--</li>--%>
+        <%--</ul>--%>
+
+      <%--</li>--%>
+    </ul>
+
+
+  </div>
+</div>
